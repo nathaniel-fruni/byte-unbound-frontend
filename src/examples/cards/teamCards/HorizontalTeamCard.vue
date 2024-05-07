@@ -15,7 +15,7 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  description: {
+  short_description: {
     type: String,
     required: true,
   },
@@ -24,10 +24,10 @@ const props = defineProps({
 const MAX_DESCRIPTION_LENGTH = 100;
 
 const truncatedDescription = ref(
-  props.description.slice(0, MAX_DESCRIPTION_LENGTH)
+  props.short_description.slice(0, MAX_DESCRIPTION_LENGTH)
 );
 const isDescriptionOverflowed = ref(
-  props.description.length > MAX_DESCRIPTION_LENGTH
+  props.short_description.length > MAX_DESCRIPTION_LENGTH
 );
 
 </script>

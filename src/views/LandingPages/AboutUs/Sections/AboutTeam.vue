@@ -45,7 +45,7 @@ onMounted(async () => {
               link: speaker.linkedin,
             }"
             :position="{ label: speaker.partner.name, color: 'success' }"
-            :description="speaker.description"
+            :short_description="speaker.short_description"
           />
         </div>
       </div>
