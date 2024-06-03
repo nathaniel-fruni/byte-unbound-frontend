@@ -12,132 +12,14 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  date: {
-    type: String,
-    required: true,
-  },
   review: {
     type: String,
     required: true,
   },
-  rating: {
-    type: Number,
-    required: true,
-  },
 });
-
-// gets rating
-const ratings = (rating) => {
-  let ratingValue;
-  if (rating == 1) {
-    ratingValue = `
-    ${
-      props.color
-        ? `
-    <i class="fas fa-star text-white" aria-hidden="true"></i>
-    <i class="far fa-star text-white" aria-hidden="true"></i>
-    <i class="far fa-star text-white" aria-hidden="true"></i>
-    <i class="far fa-star text-white" aria-hidden="true"></i>
-    <i class="far fa-star text-white" aria-hidden="true"></i>
-    `
-        : `
-    <i class="fas fa-star" aria-hidden="true"></i>
-    <i class="far fa-star" aria-hidden="true"></i>
-    <i class="far fa-star" aria-hidden="true"></i>
-    <i class="far fa-star" aria-hidden="true"></i>
-    <i class="far fa-star" aria-hidden="true"></i>
-
-    `
-    }
-`;
-  } else if (rating == 2) {
-    ratingValue = `
-    ${
-      props.color
-        ? `
-    <i class="fas fa-star text-white" aria-hidden="true"></i>
-    <i class="fas fa-star text-white" aria-hidden="true"></i>
-    <i class="far fa-star text-white" aria-hidden="true"></i>
-    <i class="far fa-star text-white" aria-hidden="true"></i>
-    <i class="far fa-star text-white" aria-hidden="true"></i>
-          `
-        : `
-    <i class="fas fa-star" aria-hidden="true"></i>
-    <i class="fas fa-star" aria-hidden="true"></i>
-    <i class="far fa-star" aria-hidden="true"></i>
-    <i class="far fa-star" aria-hidden="true"></i>
-    <i class="far fa-star" aria-hidden="true"></i>
-        `
-    }
-`;
-  } else if (rating == 3) {
-    ratingValue = `
-    ${
-      props.color
-        ? `
-         <i class="fas fa-star text-white" aria-hidden="true"></i>
-    <i class="fas fa-star text-white" aria-hidden="true"></i>
-    <i class="fas fa-star text-white" aria-hidden="true"></i>
-    <i class="far fa-star text-white" aria-hidden="true"></i>
-    <i class="far fa-star text-white" aria-hidden="true"></i>
-          `
-        : `
-    <i class="fas fa-star" aria-hidden="true"></i>
-    <i class="fas fa-star " aria-hidden="true"></i>
-    <i class="fas fa-star " aria-hidden="true"></i>
-    <i class="far fa-star " aria-hidden="true"></i>
-    <i class="far fa-star " aria-hidden="true"></i>
-        `
-    }
-`;
-  } else if (rating == 4) {
-    ratingValue = `
-    ${
-      props.color
-        ? `
-    <i class="fas fa-star text-white" aria-hidden="true"></i>
-    <i class="fas fa-star text-white" aria-hidden="true"></i>
-    <i class="fas fa-star text-white" aria-hidden="true"></i>
-    <i class="fas fa-star text-white" aria-hidden="true"></i>
-    <i class="far fa-star text-white" aria-hidden="true"></i>
-`
-        : `
-    <i class="fas fa-star " aria-hidden="true"></i>
-    <i class="fas fa-star " aria-hidden="true"></i>
-    <i class="fas fa-star " aria-hidden="true"></i>
-    <i class="fas fa-star " aria-hidden="true"></i>
-    <i class="far fa-star " aria-hidden="true"></i>
-
-        `
-    }
-`;
-  } else if (rating == 5) {
-    ratingValue = `
-    ${
-      props.color
-        ? `
-    <i class="fas fa-star text-white" aria-hidden="true"></i>
-    <i class="fas fa-star text-white" aria-hidden="true"></i>
-    <i class="fas fa-star text-white" aria-hidden="true"></i>
-    <i class="fas fa-star text-white" aria-hidden="true"></i>
-    <i class="fas fa-star text-white" aria-hidden="true"></i>
-`
-        : `
-    <i class="fas fa-star" aria-hidden="true"></i>
-    <i class="fas fa-star" aria-hidden="true"></i>
-    <i class="fas fa-star" aria-hidden="true"></i>
-    <i class="fas fa-star" aria-hidden="true"></i>
-    <i class="fas fa-star" aria-hidden="true"></i>
-
-        `
-    }
-`;
-  }
-  return ratingValue;
-};
 </script>
 <template>
-  <div class="col-lg-4 col-md-8">
+  <div class="col-lg-4 col-md-8 mb-4">
     <div :class="`card ${props.color ? props.color : 'card-plain'}`">
       <div class="card-body">
         <img
@@ -155,14 +37,12 @@ const ratings = (rating) => {
               {{ props.name }}
             </h6>
             <div class="stats" :class="props.color ? 'text-white' : ''">
-              <i class="far fa-clock"></i> {{ props.date }}
             </div>
           </div>
         </div>
         <p class="mt-4" :class="props.color ? 'text-white' : ''">
           {{ props.review }}
         </p>
-        <div class="rating mt-3" v-html="ratings(props.rating)"></div>
       </div>
     </div>
   </div>
