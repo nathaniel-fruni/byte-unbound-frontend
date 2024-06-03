@@ -6,7 +6,7 @@ import DefaultReviewCard from "@/examples/cards/reviewCards/DefaultReviewCard.vu
 const testimonials = ref([]);
 
 const getTestimonalImageUrl = (imageName) => {
-  return import.meta.env.VITE_API_ENDPOINT + `/storage/images/testimonal/${imageName}`;
+  return import.meta.env.VITE_API_ENDPOINT + `/storage/images/testimonals/${imageName}`;
 };
 
 onMounted(async () => {
