@@ -6,7 +6,7 @@ import HorizontalTeamCard from "@/examples/cards/teamCards/HorizontalTeamCard.vu
 const speakers = ref([]);
 
 const getSpeakerImageUrl = (imageName) => {
-  return `http://localhost/projekt_backend/byte-unbound-backend/public/storage/images/speakers/${imageName}`;
+  return import.meta.env.VITE_API_ENDPOINT + `/storage/images/speakers/${imageName}`;
 };
 
 onMounted(async () => {
