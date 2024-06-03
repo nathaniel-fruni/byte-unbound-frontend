@@ -6,13 +6,13 @@ import HorizontalTeamCard from "@/examples/cards/teamCards/HorizontalTeamCard.vu
 const speakers = ref([]);
 
 const getSpeakerImageUrl = (imageName) => {
-  return `http://localhost/byte-unbound-backend/public/storage/images/speakers/${imageName}`;
+  return `http://localhost/projekt_backend/byte-unbound-backend/public/storage/images/speakers/${imageName}`;
 };
 
 onMounted(async () => {
   try {
     const response = await axios.get(
-      "http://localhost/byte-unbound-backend/public/api/get-speakers"
+      import.meta.env.VITE_API_ENDPOINT + '/api/get-speakers'
     );
     speakers.value = response.data;
   } catch (error) {
