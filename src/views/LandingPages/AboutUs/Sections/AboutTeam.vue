@@ -22,7 +22,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <section class="pb-5 position-relative bg-gradient-dark mx-n3">
+  <section class="pb-5 position-relative bg-gradient-dark ">
     <div class="container">
       <div class="row">
         <div class="col-md-8 text-start mb-5 mt-5">
