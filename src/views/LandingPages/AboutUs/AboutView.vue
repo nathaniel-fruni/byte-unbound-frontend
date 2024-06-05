@@ -7,6 +7,7 @@ import AboutTeam from "./Sections/AboutTeam.vue";
 import Featuring from "./Sections/AboutFeaturing.vue";
 import axios from "axios";
 
+
 const body = document.getElementsByTagName("body")[0];
 const partners = ref([]);
 
