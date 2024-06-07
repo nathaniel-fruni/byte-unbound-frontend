@@ -60,9 +60,11 @@ function selectTalkDescription(description) {
             <div class="table-responsive">
               <table class="table align-items-center mb-0">
                 <thead>
-                <th class="col-lg-2 text-white">Stage</th>
-                <th class="col-lg-2 text-white">Čas</th>
-                <th class="col-lg-8 text-white">Prednáška</th>
+                <tr class="d-none d-lg-table-row">
+                  <th class="col-lg-2 text-white">Stage</th>
+                  <th class="col-lg-2 text-white">Čas</th>
+                  <th class="col-lg-8 text-white">Prednáška</th>
+                </tr>
                 </thead>
                 <tbody>
                 <template v-for="stage in stages" :key="stage">
@@ -73,11 +75,11 @@ function selectTalkDescription(description) {
                   </tr>
                   <template v-if="activeStage === stage">
                     <tr v-for="row in rowsByStage[stage]" :key="row.id" @click="selectTalkDescription(row.talk.description)">
-                      <td></td>
+                      <td class="d-none d-lg-table-row"></td>
                       <td class="text-white">{{ formatTime(row.start_time) }} - {{ formatTime(row.end_time) }}</td>
                       <td class="text-white">
                         <div>
-                          <p class="text-bold">{{ row.talk.title }} <i class="fas fa-terminal mx-2"></i></p>
+                          <p class="text-bold text-wrap">{{ row.talk.title }} <i class="fas fa-terminal mx-2"></i></p>
                           <div v-if="selectedTalkDescription === row.talk.description" class="text-wrap mb-2">
                             <p class="text-white">{{ selectedTalkDescription }}</p>
                             <p class="text-white">Speaker: <span class="text-secondary mx-2">{{ row.talk.speaker.first_name + ' ' + row.talk.speaker.last_name }}</span> {{ row.talk.speaker.partner.name }}</p>
@@ -96,3 +98,4 @@ function selectTalkDescription(description) {
     </div>
   </section>
 </template>
+

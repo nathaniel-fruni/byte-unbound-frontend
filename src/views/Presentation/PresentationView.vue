@@ -164,9 +164,9 @@ onUnmounted(() => {
     </div>
   </div>
 
-
   <DefaultFooter />
 </template>
+
 <style>
 .sponsor-logo {
   max-height: 90px;
