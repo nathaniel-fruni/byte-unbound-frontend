@@ -95,7 +95,7 @@ onUnmounted(() => {
   <div class="card card-body blur shadow-blur mx-3 mx-md-4 mt-n6">
     <PresentationCounter :conference="conference" />
     <div class="text-center">
-      <RouterLink :to="{ name: 'about' }"><span class="m-3 col-lg-3 col-sm-12 btn btn-sm mb-0 bg-gradient-dark px-5 py-3 mt-4">Program</span></RouterLink>
+      <RouterLink :to="{ name: 'program' }"><span class="m-3 col-lg-3 col-sm-12 btn btn-sm mb-0 bg-gradient-dark px-5 py-3 mt-4">Program</span></RouterLink>
       <RouterLink :to="{ name: 'about' }"><span class="m-3 col-lg-3 col-sm-12 btn btn-sm mb-0 bg-gradient-dark px-5 py-3 mt-4">Speakers</span></RouterLink>
       <RouterLink :to="{ name: 'about' }"><span class="m-3 col-lg-3 col-sm-12 btn btn-sm mb-0 bg-gradient-dark px-5 py-3 mt-4">Registrácia</span></RouterLink>
     </div>
@@ -159,10 +159,7 @@ onUnmounted(() => {
             allowfullscreen>
           </iframe>
         </div>
-
-        <div class="col-lg-4 col-md-12">
-          <Posts />
-        </div>
+        <Posts />
       </div>
     </div>
   </div>
