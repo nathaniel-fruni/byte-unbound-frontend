@@ -18,15 +18,17 @@ const props = defineProps({
   },
 });
 </script>
+
 <template>
-  <div class="col-lg-4 col-md-8 mb-4">
-    <div :class="`card ${props.color ? props.color : 'card-plain'}`">
-      <div class="card-body">
+  <div class="col-lg-4 col-md-6 mb-4">
+    <div :class="`card ${props.color ? props.color : 'card-plain'}`" style="height: 100%;">
+      <div class="card-body d-flex flex-column justify-content-between">
         <img
           v-if="props.image"
           :src="props.image"
           :alt="props.name"
           class="avatar avatar-lg border-radius-lg shadow mt-n5"
+          style="object-fit: cover; max-height: 200px;"
         />
         <div class="author">
           <div class="name">
@@ -36,8 +38,6 @@ const props = defineProps({
             >
               {{ props.name }}
             </h6>
-            <div class="stats" :class="props.color ? 'text-white' : ''">
-            </div>
           </div>
         </div>
         <p class="mt-4" :class="props.color ? 'text-white' : ''">
@@ -47,3 +47,9 @@ const props = defineProps({
     </div>
   </div>
 </template>
+
+<style scoped>
+.card {
+  height: 100%;
+}
+</style>

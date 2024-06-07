@@ -43,7 +43,7 @@ const signIn = async () => {
       class="page-header align-items-start min-vh-100"
       :style="{
         backgroundImage:
-          'url(/src/assets/img/backgrounds/sign-in-background.jpg)'
+          'url(/src/assets/img/backgrounds/main-background.jpg)'
       }"
       loading="lazy"
     >

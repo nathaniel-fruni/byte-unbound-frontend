@@ -4,55 +4,54 @@ defineProps({
     type: String,
     required: true,
   },
-  title: {
+  name: {
     type: String,
     required: true,
   },
-  description: {
+  phone: {
     type: String,
     required: true,
   },
-  action: {
-    type: Object,
-    route: String,
-    color: String,
-    label: String,
-    default: () => ({
-      route: "javascript:;",
-      color: "success",
-      label: "Read more",
-    }),
-  },
+  email: {
+    type: String,
+    required: true
+  }
 });
 </script>
+
 <template>
   <div class="card card-plain">
     <div class="card-header p-0 position-relative">
       <a class="d-block blur-shadow-image">
         <img
           :src="image"
-          :alt="title"
-          class="img-fluid shadow border-radius-lg"
+          :alt="name"
+          class="img-fluid shadow border-radius-lg card-img"
           loading="lazy"
         />
       </a>
     </div>
     <div class="card-body px-0">
       <h5>
-        <a :href="action.route" class="text-dark font-weight-bold">{{
-          title
-        }}</a>
+        <a class="text-dark font-weight-bold">{{ name }}</a>
       </h5>
-      <p>
-        {{ description }}
-      </p>
-      <a
-        :href="action.route"
-        class="text-sm icon-move-right"
-        :class="`text-${action.color}`"
-        >{{ action.label }}
-        <i class="fas fa-arrow-right text-xs ms-1"></i>
-      </a>
+      <h6>
+        <a class="text-dark font-weight-bold">Organizátor</a>
+      </h6>
+      <p class="contact-info">{{ phone }}</p>
+      <p class="contact-info">{{ email }}</p>
     </div>
   </div>
 </template>
+
+<style scoped>
+.card-img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+.contact-info {
+  margin: 0;
+}
+</style>
