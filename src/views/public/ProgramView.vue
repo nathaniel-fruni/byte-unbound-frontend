@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, onUnmounted } from "vue";
-import DefaultNavbar from "./NavbarDefault.vue";
-import DefaultFooter from "./FooterDefault.vue";
+import DefaultNavbar from "./components/NavbarDefault.vue";
+import DefaultFooter from "./components/FooterDefault.vue";
 import bg0 from "@/assets/img/backgrounds/section-background.jpg";
 
 import Program from '@/views/public/sections/Program.vue'

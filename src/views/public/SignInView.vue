@@ -4,7 +4,7 @@ import axios from "axios";
 import { useRouter } from "vue-router";
 import Header from "@/views/public/sections/Header.vue";
 import MaterialButton from "@/components/MaterialButton.vue";
-import NavbarDefault from '@/views/public/NavbarDefault.vue';
+import NavbarDefault from '@/views/public/components/NavbarDefault.vue';
 
 const email = ref("");
 const password = ref("");
@@ -35,7 +35,7 @@ const signIn = async () => {
 </script>
 
 <template>
-  <NavbarDefault :sticky="true"/>
+  <NavbarDefault transparent/>
   <Header>
     <div
         class="page-header align-items-start min-vh-100"

@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink } from "vue-router";
 import { ref, watch } from "vue";
-import { useWindowsWidth } from "../../assets/js/useWindowsWidth";
+import { useWindowsWidth } from "../../../assets/js/useWindowsWidth";
 
 const props = defineProps({
   transparent: {
@@ -150,7 +150,7 @@ watch(
         </ul>
         <ul class="navbar-nav d-lg-block d-none">
           <li class="nav-item mx-2">
-            <RouterLink :to="{ name: 'sign-in' }">
+            <RouterLink :to="{ name: 'dashboard' }">
               <span class="btn btn-sm mb-0 bg-gradient-dark">Admin</span>
             </RouterLink>
           </li>

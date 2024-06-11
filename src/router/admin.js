@@ -7,7 +7,7 @@ export default [
     children: [
       {
         path: '',
-        name: 'Dashboard',
+        name: 'dashboard',
         component: Dashboard,
         meta: { requiresAuth: true },
       },
