@@ -35,7 +35,7 @@ const signIn = async () => {
 </script>
 
 <template>
-  <NavbarDefault />
+  <NavbarDefault :sticky="true"/>
   <Header>
     <div
         class="page-header align-items-start min-vh-100"
