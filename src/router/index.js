@@ -25,7 +25,7 @@ router.beforeEach((to, from, next) => {
 });
 
 function isAuthenticated() {
-  const accessToken = document.cookie.replace(/(?:(?:^|.;\s)access_token\s*=\s*([^;]).$)|^.*$/,"$1");
+  const accessToken = document.cookie.replace(/(?:(?:^|.*;\s*)access_token\s*=\s*([^;]*).$)|^.*$/,"$1");
   console.log('Access token from cookies:', accessToken);
   return accessToken ? true : false;
 }
