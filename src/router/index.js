@@ -12,4 +12,20 @@ const router = createRouter({
   routes,
 });
 
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!isAuthenticated()) {
+      next({ path: '/sign-in' });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
+});
+
+function isAuthenticated() {
+  const accessToken = document.cookie.replace(/(?:(?:^|.;\s)access_token\s*=\s*([^;]).$)|^.*$/, "$1");
+  return accessToken ? true : false;
+}
 export default router;
