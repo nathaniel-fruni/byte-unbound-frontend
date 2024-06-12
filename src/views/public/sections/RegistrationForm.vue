@@ -15,6 +15,7 @@ import setTooltip from "@/assets/js/tooltip";
 import { useAppStore } from "@/stores";
 const store = useAppStore();
 
+const selectedStage = ref("");
 const selectedLecture1 = ref("");
 const selectedLecture2 = ref("");
 const lectureInfo1 = ref("");
@@ -41,8 +42,8 @@ watch(selectedLecture2, (newValue) => {
 });
 
 const addLecture = (lecture) => {
-  if (lecture && !chosenLectures.value.includes(lecture)) {
-    chosenLectures.value.push(lectures[lecture]); // Push the lecture object, not just the ID
+  if (lecture && !chosenLectures.value.includes(lectures[lecture])) {
+    chosenLectures.value.push(lectures[lecture]);
     // Clearing lecture info after adding it to the list
     lectureInfo1.value = "";
     lectureInfo2.value = "";
@@ -57,6 +58,7 @@ onMounted(() => {
   setTooltip(store.bootstrap);
 });
 </script>
+
 
 
 
@@ -81,11 +83,22 @@ onMounted(() => {
                       Vyberte si prednášky na ktorých sa chcete zúčastniť
                     </p>
 
-                    <!-- Row for dropdowns -->
+                    <!-- Stage selection dropdown -->
                     <div class="row">
-                      <!-- Dropdown 1 -->
-                      <div class="col-md-6 mb-3">
-                        <label class="text-white opacity-8" for="dropdown1">Soft Dev Stage</label>
+                      <div class="col-md-12 mb-3">
+                        <label class="text-white opacity-8" for="stageDropdown">Vyberte Stage</label>
+                        <select id="stageDropdown" class="form-control" v-model="selectedStage">
+                          <option value="">Vyberte Stage</option>
+                          <option value="softDevStage">Soft Dev Stage</option>
+                          <option value="aiDataStage">AI and Data Stage</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <!-- Stage specific dropdowns -->
+                    <div class="row">
+                      <div v-if="selectedStage === 'softDevStage'" class="col-md-12 mb-3">
+                        <label class="text-white opacity-8" for="dropdown1">Vyberte prednášku</label>
                         <select id="dropdown1" class="form-control" v-model="selectedLecture1">
                           <option value="">Vyberte prednášku</option>
                           <option value="lecture1">Prednáška 1</option>
@@ -93,8 +106,8 @@ onMounted(() => {
                           <option value="lecture3">Prednáška 3</option>
                         </select>
                       </div>
-                      <!-- Dropdown 2 -->
-                      <div class="col-md-6 mb-3">
+
+                      <div v-if="selectedStage === 'aiDataStage'" class="col-md-12 mb-3">
                         <label class="text-white opacity-8" for="dropdown2">AI and Data Stage</label>
                         <select id="dropdown2" class="form-control" v-model="selectedLecture2">
                           <option value="">Vyberte prednášku</option>
@@ -107,7 +120,7 @@ onMounted(() => {
                       </div>
                     </div>
 
-                    <!-- Lecture information -->
+                    <!-- Lecture information for Soft Dev Stage -->
                     <div v-if="selectedLecture1 && lectureInfo1" class="bg-white text-dark p-3 mt-3">
                       <p>{{ lectureInfo1 }}</p>
                       <div class="d-flex justify-content-end">
@@ -122,6 +135,7 @@ onMounted(() => {
                       </div>
                     </div>
 
+                    <!-- Lecture information for AI and Data Stage -->
                     <div v-if="selectedLecture2 && lectureInfo2" class="bg-white text-dark p-3 mt-3">
                       <p>{{ lectureInfo2 }}</p>
                       <div class="d-flex justify-content-end">
@@ -136,11 +150,11 @@ onMounted(() => {
                       </div>
                     </div>
 
-
+                    <!-- Chosen Lectures -->
                     <div v-if="chosenLectures.length" class="bg-white text-dark p-3 mt-3">
                       <h5>Vybrané prednášky:</h5>
                       <ul>
-                        <li v-for="lecture in chosenLectures" :key="lecture" class="d-flex justify-content-between align-items-center">
+                        <li v-for="lecture in chosenLectures" :key="lecture.name" class="d-flex justify-content-between align-items-center">
                           <div>{{ lecture.name }}</div>
                           <div>
                             <button class="btn btn-danger btn-sm" @click="removeLecture(lecture)">Odstrániť</button>
@@ -149,55 +163,40 @@ onMounted(() => {
                       </ul>
                     </div>
 
-
-
                   </div>
                 </div>
               </div>
               <div class="col-lg-7">
                 <form class="p-3" id="contact-form" method="post">
                   <div class="card-header px-4 py-sm-5 py-3">
-                    <h2>Say Hi!</h2>
-                    <p class="lead">We'd like to talk with you.</p>
+                    <h2>Osobné údaje</h2>
+                    <p class="lead">Prosím vyplnite všetky polia ďalšie informácie vám budú zaslané na e-mailovú adresu</p>
                   </div>
                   <div class="card-body pt-1">
                     <div class="row">
                       <div class="col-md-12 pe-2 mb-3">
                         <MaterialInput
                             class="input-group-static mb-4"
-                            label="My name is"
+                            label="Meno"
                             type="text"
-                            placeholder="Full Name"
+                            placeholder="Meno"
                         />
                       </div>
                       <div class="col-md-12 pe-2 mb-3">
                         <MaterialInput
                             class="input-group-static mb-4"
-                            label="I'm looking for"
+                            label="Priezvisko"
                             type="text"
-                            placeholder="What you love"
+                            placeholder="Priezvisko"
                         />
                       </div>
                       <div class="col-md-12 pe-2 mb-3">
-                        <MaterialTextArea
+                        <MaterialInput
                             class="input-group-static mb-4"
-                            placeholder="I want to say that..."
-                            :rows="6"
-                        >
-                          Your message
-                        </MaterialTextArea>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-6 text-end ms-auto">
-                        <MaterialButton
-                            variant="gradient"
-                            color="success"
-                            type="submit"
-                            class="mb-0"
-                        >
-                          Send Message
-                        </MaterialButton>
+                            label="E-mail"
+                            type="email"
+                            placeholder="E-mail"
+                        />
                       </div>
                     </div>
                   </div>
