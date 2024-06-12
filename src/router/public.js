@@ -3,7 +3,6 @@ import SpeakersView from "../views/public/SpeakersView.vue";
 import ProgramView from '@/views/public/ProgramView.vue';
 import GalleryView from '@/views/public/GalleryView.vue';
 import GalleryYearView from '@/views/public/GalleryYearView.vue';
-
 import ContactView from "../views/public/ContactView.vue";
 // registration route will be added after creating the view
 import SignInView from '@/views/public/SignInView.vue';
@@ -34,10 +33,9 @@ export default [
         component: GalleryView,
       },
       {
-        path: '/gallery/:id',
-        name: "gallery-year",
+        path: "gallery/2022",
+        name: "galleryYear",
         component: GalleryYearView,
-        props:true,
       },
       {
         path: "contact",

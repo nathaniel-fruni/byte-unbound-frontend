@@ -1,7 +1,7 @@
 <script setup>
 import { RouterLink } from "vue-router";
 import { ref, watch } from "vue";
-import { useWindowsWidth } from "../../assets/js/useWindowsWidth";
+import { useWindowsWidth } from "../../../assets/js/useWindowsWidth";
 
 const props = defineProps({
   transparent: {

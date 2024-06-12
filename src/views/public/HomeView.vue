@@ -1,8 +1,8 @@
 <script setup>
 import { onMounted, onUnmounted, ref} from 'vue';
 import { RouterLink } from 'vue-router'
-import NavbarDefault from "./NavbarDefault.vue";
-import DefaultFooter from "./FooterDefault.vue";
+import NavbarDefault from "./components/NavbarDefault.vue";
+import DefaultFooter from "./components/FooterDefault.vue";
 import Header from "./sections/Header.vue";
 import MainInfo from "./sections/MainInfo.vue";
 import PresentationTestimonials from "./sections/PresentationTestimonials.vue";

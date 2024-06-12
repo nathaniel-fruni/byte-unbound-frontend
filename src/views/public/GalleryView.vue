@@ -1,40 +1,7 @@
-<script setup>
-import { onMounted, onUnmounted, ref } from "vue";
-import DefaultNavbar from "./NavbarDefault.vue";
-import DefaultFooter from "./FooterDefault.vue";
-import bg0 from "@/assets/img/backgrounds/section-background.jpg";
-import axios from "axios";
-
-const body = document.getElementsByTagName("body")[0];
-const galleries = ref([]);
-
-onMounted(async () => {
-  body.classList.add("about-us");
-  body.classList.add("bg-gray-200");
-
-  try {
-    const response = await axios.get(
-      import.meta.env.VITE_API_ENDPOINT + "/api/get-galleries"
-    );
-    galleries.value = response.data;
-  } catch (error) {
-    console.error("Error fetching gallery data:", error);
-  }
-});
-
-onUnmounted(() => {
-  body.classList.remove("about-us");
-  body.classList.remove("bg-gray-200");
-});
-</script>
-
 <template>
   <DefaultNavbar transparent />
   <header class="bg-gradient-dark">
-    <div
-      class="page-header min-vh-75"
-      :style="{ backgroundImage: `url(${bg0})` }"
-    >
+    <div class="page-header min-vh-75" :style="{ backgroundImage: `url(${bg0})` }">
       <span class="mask bg-gradient-dark opacity-6"></span>
       <div class="container">
         <div class="row justify-content-center">
@@ -50,17 +17,54 @@ onUnmounted(() => {
       </div>
     </div>
   </header>
-  <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6 m-t6">
-    <div v-for="gallery in galleries" :key="gallery.id"  class="card card-plain">
-      <div class="card-header p-0 position-relative bg-gradient-success">
-        <RouterLink :to="'/gallery/' + gallery.id">
-          <div class="card-header p-0 position-relative bg-gradient-success">
-            {{ gallery.name }}
+  <div class="container mt-4">
+    <div class="row justify-content-center">
+      <div v-for="gallery in galleries" :key="gallery.id" class="col-12 col-sm-12 col-md-12 col-lg-4 mb-3">
+        <div class="card shadow-sm p-4 mb-4">
+          <div class="card-body p-0">
+            <RouterLink :to="{ name: 'gallery', params: { id: gallery.id } }" class="d-block text-center">
+              <span class="btn btn-lg mb-0 bg-gradient-dark w-100 py-5">
+                {{ gallery.name }}
+              </span>
+            </RouterLink>
           </div>
-
-        </RouterLink>
+        </div>
       </div>
     </div>
   </div>
-  <DefaultFooter/>
+  <DefaultFooter />
 </template>
+
+<script setup>
+import { onMounted, onUnmounted, ref } from "vue";
+import DefaultNavbar from "./components/NavbarDefault.vue";
+import DefaultFooter from "./components/FooterDefault.vue";
+import bg0 from "@/assets/img/backgrounds/section-background.jpg";
+import axios from "axios";
+
+const body = document.getElementsByTagName("body")[0];
+const galleries = ref([]);
+
+onMounted(async () => {
+  body.classList.add("about-us");
+  body.classList.add("bg-gray-200");
+
+  try {
+    const response = await axios.get(
+        import.meta.env.VITE_API_ENDPOINT + "/api/get-galleries"
+    );
+    galleries.value = response.data;
+  } catch (error) {
+    console.error("Error fetching gallery data:", error);
+  }
+});
+
+onUnmounted(() => {
+  body.classList.remove("about-us");
+  body.classList.remove("bg-gray-200");
+});
+</script>
+
+<style scoped>
+/* Add any additional styles here */
+</style>

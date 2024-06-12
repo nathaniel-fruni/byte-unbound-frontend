@@ -3,7 +3,7 @@ import { onMounted, ref } from "vue";
 import axios from "axios";
 
 // example components
-import DefaultNavbar from "@/views/public/NavbarDefault.vue";
+import DefaultNavbar from "@/views/public/components/NavbarDefault.vue";
 import Header from "@/views/public/sections/Header.vue";
 
 //Vue Material Kit 2 components
