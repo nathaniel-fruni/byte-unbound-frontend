@@ -1,58 +1,3 @@
-<template>
-  <div>
-    <DefaultNavbar transparent />
-    <header class="bg-gradient-dark">
-      <div class="page-header min-vh-75" :style="{ backgroundImage: `url(${bg0})` }">
-        <span class="mask bg-gradient-dark opacity-6"></span>
-        <div class="container">
-          <div class="row justify-content-center">
-            <div class="col-lg-8 text-center mx-auto my-auto">
-              <h1 class="text-white">
-                Galéria <span class="text-white">{{ selectedYear }}</span>
-              </h1>
-              <p class="lead mb-4 text-white opacity-8">
-                Pozrite si fotografie z roku {{ selectedYear }}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </header>
-    <div class="container mt-4">
-      <div class="row justify-content-center">
-        <div class="col-12 col-md-8 col-lg-6">
-          <div v-if="images.length > 0" id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-              <div v-for="(image, index) in images" :key="image.id" :class="{ 'carousel-item': true, 'active': index === currentImageIndex }">
-                <div class="row justify-content-center">
-                  <div class="col-md-12">
-                    <div class="image-container">
-                      <img :src="getImageUrl(image.image)" :alt="image.image" class="d-block w-100 gallery-image">
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev" @click="prevSlide">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next" @click="nextSlide">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Next</span>
-            </button>
-          </div>
-          <div v-else class="text-center mt-5">
-            <h3>Už čoskoro!</h3>
-            <p class="lead">Zatiaľ nie sú zverejnené fotografie z roku {{ selectedYear }}.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <DefaultFooter />
-  </div>
-</template>
-
 <script setup>
 import { ref, onMounted, onUnmounted, watch } from 'vue';
 import DefaultNavbar from "./components/NavbarDefault.vue";
@@ -138,6 +83,65 @@ watch(selectedYear, () => {
   fetchImages();
 });
 </script>
+
+<template>
+  <div>
+    <DefaultNavbar transparent />
+
+    <header class="bg-gradient-dark">
+      <div class="page-header min-vh-75" :style="{ backgroundImage: `url(${bg0})` }">
+        <span class="mask bg-gradient-dark opacity-6"></span>
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-lg-8 text-center mx-auto my-auto">
+              <h1 class="text-white">
+                Galéria <span class="text-white">{{ selectedYear }}</span>
+              </h1>
+              <p class="lead mb-4 text-white opacity-8">
+                Pozrite si fotografie z roku {{ selectedYear }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container mt-4">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+          <div v-if="images.length > 0" id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <div v-for="(image, index) in images" :key="image.id" :class="{ 'carousel-item': true, 'active': index === currentImageIndex }">
+                <div class="row justify-content-center">
+                  <div class="col-md-12">
+                    <div class="image-container">
+                      <img :src="getImageUrl(image.image)" :alt="image.image" class="d-block w-100 gallery-image">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev" @click="prevSlide">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next" @click="nextSlide">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+          <div v-else class="text-center mt-5">
+            <h3>Už čoskoro!</h3>
+            <p class="lead">Zatiaľ nie sú zverejnené fotografie z roku {{ selectedYear }}.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <DefaultFooter />
+  </div>
+</template>
+
+
 
 <style scoped>
 .gallery-image {
