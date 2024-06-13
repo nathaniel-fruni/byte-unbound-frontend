@@ -1,5 +1,6 @@
 import Dashboard from '@/views/admin/DashboardView.vue';
 import AdminRegistrationView from '@/views/admin/AdminRegistrationView.vue';
+import ManageTestimonialsView from '@/views/admin/ManageTestimonialsView.vue'
 
 export default [
   {
@@ -16,6 +17,12 @@ export default [
         path: 'admin-registration',
         name: 'admin-registration',
         component: AdminRegistrationView,
+        meta: { requiresAuth: true },
+      },
+      {
+        path: 'manage-testimonials',
+        name: 'manage-testimonials',
+        component: ManageTestimonialsView,
         meta: { requiresAuth: true },
       },
     ],

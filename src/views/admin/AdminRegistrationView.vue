@@ -28,7 +28,7 @@ const registerAdmin = async () => {
       });
 
     console.log(response.data);
-    
+
     first_name.value = "";
     last_name.value = "";
     email.value = "";
@@ -58,55 +58,20 @@ const registerAdmin = async () => {
                   </div>
                   <div class="card-body pt-1">
                     <div class="row">
-                      <div class="col-md-12 pe-2 mb-3">
-                        <input
-                          id="first_name"
-                          v-model="first_name"
-                          class="input-group-outline rounded-2 col-12 p-2 px-2 text-sm"
-                          placeholder="Meno"
-                          type="text"
-                          is-required="true"
-                        />
+                      <div class="mb-3 custom-input">
+                        <input type="text" v-model="first_name" class="form-control" placeholder="Meno" required />
                       </div>
-                      <div class="col-md-12 pe-2 mb-3">
-                        <input
-                          id="last_name"
-                          v-model="last_name"
-                          class="input-group-outline rounded-2 col-12 p-2 px-2 text-sm"
-                          placeholder="Priezvisko"
-                          type="text"
-                          is-required="true"
-                        />
+                      <div class="mb-3 custom-input">
+                        <input type="text" v-model="last_name" class="form-control" placeholder="Priezvisko" required />
                       </div>
-                      <div class="col-md-12 pe-2 mb-3">
-                        <input
-                          id="email"
-                          v-model="email"
-                          class="input-group-outline rounded-2 col-12 p-2 px-2 text-sm"
-                          placeholder="Email"
-                          type="email"
-                          is-required="true"
-                        />
+                      <div class="mb-3 custom-input">
+                        <input type="email" v-model="email" class="form-control" placeholder="Email" required />
                       </div>
-                      <div class="col-md-12 pe-2 mb-3">
-                        <input
-                          id="password"
-                          v-model="password"
-                          class="input-group-outline rounded-2 col-12 p-2 px-2 text-sm"
-                          placeholder="Heslo"
-                          type="password"
-                          is-required="true"
-                        />
+                      <div class="mb-3 custom-input">
+                        <input type="password" v-model="password" class="form-control" placeholder="Heslo" required />
                       </div>
-                      <div class="col-md-12 pe-2 mb-3">
-                        <input
-                          id="c_password"
-                          v-model="c_password"
-                          class="input-group-outline rounded-2 col-12 p-2 px-2 text-sm"
-                          placeholder="Heslo"
-                          type="password"
-                          is-required="true"
-                        />
+                      <div class="mb-3 custom-input">
+                        <input type="password" v-model="c_password" class="form-control" placeholder="Heslo znova" required />
                       </div>
                     </div>
                     <div class="row">
@@ -133,3 +98,17 @@ const registerAdmin = async () => {
     </div>
   </section>
 </template>
+<style scoped>
+.custom-input .form-control {
+  border: none;
+  border-bottom: 1px solid #ced4da;
+  border-radius: 0;
+  box-shadow: none;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.custom-input .form-control:focus {
+  border-bottom: 1px solid #495057;
+  box-shadow: none;
+}
+</style>
