@@ -117,7 +117,7 @@ onMounted(async () => {
             </li>
             <li class="nav-item">
               <RouterLink
-                :to="{ name: 'contact' }"
+                :to="{ name: 'gallery' }"
                 class="nav-link d-flex cursor-pointer align-items-center"
               >
                 <span>galéria</span>

@@ -125,7 +125,7 @@ watch(
           </li>
           <li class="nav-item dropdown dropdown-hover mx-2">
             <RouterLink
-              :to="{ name: 'contact' }"
+              :to="{ name: 'gallery' }"
               class="nav-link d-flex cursor-pointer align-items-center"
             >
               <span>Galéria</span>
