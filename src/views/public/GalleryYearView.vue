@@ -8,10 +8,10 @@
           <div class="row justify-content-center">
             <div class="col-lg-8 text-center mx-auto my-auto">
               <h1 class="text-white">
-                Galéria <span class="text-white"></span>
+                Galéria <span class="text-white">{{ selectedYear }}</span>
               </h1>
               <p class="lead mb-4 text-white opacity-8">
-                Pozrite si fotografie z roku 2022
+                Pozrite si fotografie z roku {{ selectedYear }}
               </p>
             </div>
           </div>
@@ -21,13 +21,13 @@
     <div class="container mt-4">
       <div class="row justify-content-center">
         <div class="col-12 col-md-8 col-lg-6">
-          <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+          <div v-if="images.length > 0" id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
-              <div class="carousel-item" :class="{ active: true }">
+              <div v-for="(image, index) in images" :key="image.id" :class="{ 'carousel-item': true, 'active': index === currentImageIndex }">
                 <div class="row justify-content-center">
                   <div class="col-md-12">
-                    <div class="image-container"> <!-- Container div added -->
-                      <img :src="currentImage.url" :alt="currentImage.name" class="d-block w-100 gallery-image">
+                    <div class="image-container">
+                      <img :src="getImageUrl(image.image)" :alt="image.image" class="d-block w-100 gallery-image">
                     </div>
                   </div>
                 </div>
@@ -42,6 +42,10 @@
               <span class="visually-hidden">Next</span>
             </button>
           </div>
+          <div v-else class="text-center mt-5">
+            <h3>Už čoskoro!</h3>
+            <p class="lead">Zatiaľ nie sú zverejnené fotografie z roku {{ selectedYear }}.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -50,51 +54,88 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 import DefaultNavbar from "./components/NavbarDefault.vue";
 import DefaultFooter from "./components/FooterDefault.vue";
 import bg0 from "@/assets/img/backgrounds/section-background.jpg";
+import axios from "axios";
+import { useRoute } from 'vue-router';
 
-const images = [
-  {
-    url: "https://via.placeholder.com/100",
-    name: "Image 1"
-  },
-  {
-    url: "https://via.placeholder.com/200",
-    name: "Image 2"
-  },
-  {
-    url: "https://via.placeholder.com/300",
-    name: "Image 3"
-  },
-  {
-    url: "https://via.placeholder.com/400",
-    name: "Image 4"
-  },
-  // Add more images as needed
-];
+const body = document.getElementsByTagName("body")[0];
+const images = ref([]);
+const route = useRoute();
+const selectedYear = ref(route.params.year);
+const galleries = ref([]);
+
+const fetchGalleries = async () => {
+  try {
+    const response = await axios.get(`${import.meta.env.VITE_API_ENDPOINT}/api/get-galleries`);
+    galleries.value = response.data;
+
+    buildYearToGalleryIdMap();
+
+    fetchImages();
+  } catch (error) {
+    console.error("Error fetching galleries data:", error);
+  }
+};
+
+const fetchImages = async () => {
+  try {
+    const galleryId = getGalleryId(selectedYear.value);
+    if (!galleryId) {
+      console.error(`Gallery for year ${selectedYear.value} not found.`);
+      return;
+    }
+
+    const response = await axios.get(`${import.meta.env.VITE_API_ENDPOINT}/api/get-gallery-images-byGalleryId/${galleryId}`);
+    images.value = response.data;
+  } catch (error) {
+    console.error("Error fetching images data:", error);
+  }
+};
+
+const getImageUrl = (imageName) => {
+  return `${import.meta.env.VITE_API_ENDPOINT}/storage/images/gallery/${selectedYear.value}/${imageName}`;
+};
+
+const buildYearToGalleryIdMap = () => {
+  galleries.value.forEach(gallery => {
+    yearToGalleryIdMap.value[gallery.name] = gallery.id;
+  });
+};
+
+const yearToGalleryIdMap = ref({});
+
+const getGalleryId = (year) => {
+  return yearToGalleryIdMap.value[year];
+};
 
 const currentImageIndex = ref(0);
 
-const currentImage = computed(() => images[currentImageIndex.value]);
-
 const prevSlide = () => {
-  currentImageIndex.value = (currentImageIndex.value - 1 + images.length) % images.length;
+  currentImageIndex.value = (currentImageIndex.value - 1 + images.value.length) % images.value.length;
 };
 
 const nextSlide = () => {
-  currentImageIndex.value = (currentImageIndex.value + 1) % images.length;
+  currentImageIndex.value = (currentImageIndex.value + 1) % images.value.length;
 };
 
 onMounted(() => {
-  // Add your logic to change the background color on component mount
-  document.body.classList.add("bg-gray-200");
+  body.classList.add("about-us");
+  body.classList.add("bg-gray-200");
+
+  fetchGalleries();
 });
 
 onUnmounted(() => {
-  // Add your logic to revert the background color on component unmount
-  document.body.classList.remove("bg-gray-200");
+  body.classList.remove("about-us");
+  body.classList.remove("bg-gray-200");
+});
+
+
+watch(selectedYear, () => {
+  fetchImages();
 });
 </script>
 
@@ -105,9 +146,8 @@ onUnmounted(() => {
 }
 
 .image-container {
-  border: 1px solid #343a40; /* Add border to create a container around the image */
-  border-radius: 5px; /* Optional: Add border radius for slightly rounded corners */
-  padding: 10px; /* Optional: Add padding inside the container */
-  background-color: #333; /* Set background color to grey */
+  border-radius: 8px;
+  padding: 10px;
+  background-color: #333;
 }
 </style>

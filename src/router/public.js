@@ -33,7 +33,7 @@ export default [
         component: GalleryView,
       },
       {
-        path: "gallery/2022",
+        path: "gallery/:year",
         name: "galleryYear",
         component: GalleryYearView,
       },
