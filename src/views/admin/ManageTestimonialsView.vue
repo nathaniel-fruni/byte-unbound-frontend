@@ -4,6 +4,9 @@ import { ref, onMounted } from 'vue';
 import MaterialButton from '@/components/MaterialButton.vue';
 
 const testimonials = ref([]);
+const conferences = ref([]);
+const selectedConferenceId = ref(null);
+
 const showNewForm = ref(false);
 const isEditMode = ref(false);
 const currentTestimonial = ref(null);
@@ -11,27 +14,30 @@ const currentTestimonial = ref(null);
 const name = ref("");
 const image = ref("");
 const testimonal_text = ref("");
-const conference_id = ref("");
-
-const fetchNewestConferenceId = async () => {
-  try {
-    const response = await axios.get(
-      import.meta.env.VITE_API_ENDPOINT + "/api/get-newestConference"
-    );
-    conference_id.value = response.data.id;
-  } catch (error) {
-    console.error("Error fetching the newest conference data:", error);
-  }
-};
 
 const getTestimonalImageUrl = (imageName) => {
   return import.meta.env.VITE_API_ENDPOINT + `/storage/images/testimonals/${imageName}`;
 };
 
+const fetchConferences = async () => {
+  try {
+    const response = await axios.get(
+      import.meta.env.VITE_API_ENDPOINT + "/api/get-conferences"
+    );
+    conferences.value = response.data;
+    if (conferences.value.length > 0) {
+      selectedConferenceId.value = conferences.value[0].id;
+      await fetchTestimonials();
+    }
+  } catch (error) {
+    console.error("Error fetching conferences data:", error);
+  }
+};
+
 const fetchTestimonials = async () => {
   try {
     const response = await axios.get(
-      import.meta.env.VITE_API_ENDPOINT + "/api/get-testimonals"
+      import.meta.env.VITE_API_ENDPOINT + `/api/get-testimonials-byConference/${selectedConferenceId.value}`
     );
     testimonials.value = response.data;
   } catch (error) {
@@ -77,7 +83,7 @@ const addTestimonial = async () => {
         name: name.value,
         image: image.value,
         testimonal_text: testimonal_text.value,
-        conference_id: conference_id.value
+        conference_id: selectedConferenceId.value
       },
       {
         headers: {
@@ -149,14 +155,33 @@ const startEdit = (testimonial) => {
   showNewForm.value = true;
 };
 
-onMounted(async () => {
-  await fetchNewestConferenceId();
+const handleConferenceChange = async (event) => {
+  selectedConferenceId.value = event.target.value;
   await fetchTestimonials();
+};
+
+onMounted(async () => {
+  await fetchConferences();
 });
 </script>
+
 <template>
   <div class="card card-body shadow-xl mx-3 mx-md-4 p-4 d-flex justify-content-center align-content-center">
     <div class="col">
+
+      <div class="container-fluid mb-4">
+        <div class="row justify-content-center text-center py-2">
+          <div class="col-lg-6 mx-auto">
+            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+              <div v-for="conference in conferences" :key="conference.id" class="form-check form-check-inline d-flex flex-column flex-sm-row">
+                <input class="btn-check" type="radio" name="conference" :id="'conference' + conference.id" :value="conference.id" v-model="selectedConferenceId" @change="handleConferenceChange">
+                <label class="btn btn-outline-dark" :for="'conference' + conference.id">{{ conference.title }}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="row">
         <div class="col-lg-6 col-md-6 mb-4 mt-1 pt-3" v-for="(testimonial, index) in testimonials" :key="index">
           <div class="card bg-gradient-dark card-plain" style="height: 100%;">
@@ -185,14 +210,16 @@ onMounted(async () => {
         </div>
       </div>
     </div>
+
     <div class="text-center">
       <MaterialButton
         variant="gradient"
         color="dark"
         @click="toggleNewForm"
-        class="mb-0 col-3"
-      ><i class="fas fa-plus me-2"></i>Pridať ďalšie</MaterialButton>
+        class="mb-0 col-lg-4 col-sm-12"
+      ><i class="fas fa-plus me-2"></i>Pridať</MaterialButton>
     </div>
+
     <div v-if="showNewForm" class="mt-4">
       <form @submit.prevent="addOrEditTestimonial">
         <div class="mb-3 custom-input">
@@ -202,20 +229,21 @@ onMounted(async () => {
           <input type="text" v-model="image" class="form-control" placeholder="URL obrázka" required />
         </div>
         <div class="mb-3 custom-input">
-          <textarea v-model="testimonal_text" class="form-control" placeholder="Text svedectva" rows="3" required></textarea>
+          <textarea v-model="testimonal_text" class="form-control" placeholder="Text" rows="3" required></textarea>
         </div>
         <div class="text-center">
           <MaterialButton
             variant="gradient"
             color="dark"
             type="submit"
-            class="mb-0 col-3"
+            class="mb-0 col-2"
           >{{ isEditMode.value ? 'Upraviť' : 'Odoslať' }}</MaterialButton>
         </div>
       </form>
     </div>
   </div>
 </template>
+
 <style scoped>
 .custom-input .form-control {
   border: none;
@@ -239,6 +267,24 @@ onMounted(async () => {
 
 .icon-button:active {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 576px) {
+  .form-check-inline {
+    display: block;
+    width: 100%;
+  }
+
+  .btn-check + .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.btn-check:checked + .btn-outline-dark {
+  background-image: linear-gradient(180deg, rgba(34,34,34,1) 0%, rgba(51,51,51,1) 100%);
+  border-color: rgba(34,34,34,1);
+  color: white;
 }
 </style>
 
