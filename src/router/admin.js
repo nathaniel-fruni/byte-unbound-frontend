@@ -1,4 +1,5 @@
 import Dashboard from '@/views/admin/DashboardView.vue';
+import AdminRegistrationView from '@/views/admin/AdminRegistrationView.vue';
 
 export default [
   {
@@ -9,6 +10,12 @@ export default [
         path: '',
         name: 'dashboard',
         component: Dashboard,
+        meta: { requiresAuth: true },
+      },
+      {
+        path: 'admin-registration',
+        name: 'admin-registration',
+        component: AdminRegistrationView,
         meta: { requiresAuth: true },
       },
     ],
