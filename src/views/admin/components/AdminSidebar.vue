@@ -33,7 +33,7 @@ const sidebarItems = ref([
   { text: 'Galéria', route: '', icon: 'fa-images' },
   { text: 'Pridať sponzora', route: '', icon: 'fa-handshake' },
   { text: 'Pridať obsah', route: '', icon: 'fa-code' },
-  { text: 'Zoznam účastníkov', route: '', icon: 'fa-users' }
+  { text: 'Zoznam účastníkov', route: 'show-attendees', icon: 'fa-users' }
 ]);
 </script>
 
