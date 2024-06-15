@@ -133,12 +133,12 @@ onUnmounted(() => {
 
     <div class="container">
       <div class="row">
-        <div class="d-flex flex-column w-100 text-center pb-2">
+        <div class="d-flex flex-column w-100 text-center">
           <h3>Naši sponzori</h3>
           <div class="d-flex justify-content-center mt-3 flex-wrap">
-            <div v-for="sponsor in sponsors" :key="sponsor.id" class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3 d-flex justify-content-center">
+            <div v-for="sponsor in sponsors" :key="sponsor.id" class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex justify-content-center">
               <a :href="sponsor.website" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="sponsor.name">
-                <img :src="getSponsorImageUrl(sponsor.logo)" :alt="sponsor.name" class="img-fluid sponsor-logo" />
+                <img :src="getSponsorImageUrl(sponsor.logo)" :alt="sponsor.name" class="w-100 sponsor-logo" />
               </a>
             </div>
           </div>
@@ -169,7 +169,7 @@ onUnmounted(() => {
 
 <style>
 .sponsor-logo {
-  max-height: 90px;
+  height: 40%;
   object-fit: contain;
 }
 </style>

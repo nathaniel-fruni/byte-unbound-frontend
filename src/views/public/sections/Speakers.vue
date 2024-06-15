@@ -41,7 +41,7 @@ watch(showModal, (newVal) => {
 </script>
 
 <template>
-  <section class="pb-5 position-relative bg-gradient-dark custom-rounded ">
+  <section class="pb-5 pt-5 position-relative bg-gradient-dark custom-rounded ">
     <div class="container">
       <div class="row">
         <div

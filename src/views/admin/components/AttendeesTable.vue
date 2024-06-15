@@ -55,11 +55,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <section class="">
-    <div class="col-lg-12 bg-gradient-dark rounded-3 p-2 px-2 shadow-blur mb-3 text-center">
-      <h3 class="text-white">Zoznam účastníkov</h3>
-    </div>
-
+  <section>
     <div class="container">
       <div class="row justify-content-center">
         <div class="container-fluid mb-4 card card-body shadow-xl mx-3 mx-md-4 p-4 d-flex justify-content-center align-content-center">
@@ -75,7 +71,7 @@ onMounted(async () => {
           </div>
 
           <div class="col-lg-12 text">
-            <div class="card card-body bg-gradient-white">
+            <div class="card card-body shadow-dark">
               <div class="table-responsive">
                 <table class="table align-items-center text-center">
                   <thead>
