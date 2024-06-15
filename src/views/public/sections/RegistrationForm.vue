@@ -1,166 +1,53 @@
-<script setup>
-import { ref, onMounted, watch } from "vue";
-import MaterialButton from "@/components/MaterialButton.vue";
-import MaterialInput from "@/components/MaterialInput.vue";
-
-// image
-import bgContact from "@/assets/img/examples/blog2.jpg";
-
-// tooltip
-import setTooltip from "@/assets/js/tooltip";
-
-// store
-import { useAppStore } from "@/stores";
-const store = useAppStore();
-
-const selectedStage = ref("");
-const selectedLecture1 = ref("");
-const selectedLecture2 = ref("");
-const lectureInfo1 = ref("");
-const lectureInfo2 = ref("");
-const chosenLectures = ref([]);
-const conflictMessage = ref("");
-
-const lectures = {
-  lecture1: { name: "Prednáška 1", info: "This is the information for Prednáška 1.", time: "11:00 - 12:00" },
-  lecture2: { name: "Prednáška 2", info: "This is the information for Prednáška 2.", time: "11:00 - 12:00" },
-  lecture3: { name: "Prednáška 3", info: "This is the information for Prednáška 3.", time: "12:00 - 13:00" },
-  lecture4: { name: "AI Stage", info: "This is the information for AI Stage.", time: "12:00 - 13:00" },
-  lecture5: { name: "Data Stage", info: "This is the information for Data Stage.", time: "14:00 - 15:00" },
-  lecture6: { name: "Extra Stage", info: "This is the information for Extra Stage.", time: "15:00 - 16:00" },
-  lecture7: { name: "Special Stage", info: "This is the information for Special Stage.", time: "16:00 - 17:00" },
-  lecture8: { name: "Advanced Stage", info: "This is the information for Advanced Stage.", time: "17:00 - 18:00" },
-};
-
-watch(selectedLecture1, (newValue) => {
-  if (!chosenLectures.value.some((lecture) => lecture.name === lectures[newValue]?.name)) {
-    lectureInfo1.value = newValue ? lectures[newValue]?.info : "";
-  } else {
-    lectureInfo1.value = "";
-  }
-});
-
-watch(selectedLecture2, (newValue) => {
-  if (!chosenLectures.value.some((lecture) => lecture.name === lectures[newValue]?.name)) {
-    lectureInfo2.value = newValue ? lectures[newValue]?.info : "";
-  } else {
-    lectureInfo2.value = "";
-  }
-});
-
-const hasTimeConflict = (newLecture) => {
-  const newLectureTime = lectures[newLecture]?.time;
-  return chosenLectures.value.some((lecture) => lecture.time === newLectureTime);
-};
-
-const addLecture = (lecture) => {
-  if (lecture && !chosenLectures.value.some((l) => l.name === lectures[lecture]?.name)) {
-    if (hasTimeConflict(lecture)) {
-      conflictMessage.value = `Nemôžete pridať prednášku ${lectures[lecture].name}, pretože už máte inú prednášku v tom čase.`;
-    } else {
-      chosenLectures.value.push(lectures[lecture]);
-      lectureInfo1.value = "";
-      lectureInfo2.value = "";
-      conflictMessage.value = "";
-      if (selectedLecture1.value === lecture) selectedLecture1.value = "";
-      if (selectedLecture2.value === lecture) selectedLecture2.value = "";
-    }
-  }
-};
-
-const removeLecture = (lecture) => {
-  chosenLectures.value = chosenLectures.value.filter((l) => l !== lecture);
-};
-
-const closeConflictMessage = () => {
-  conflictMessage.value = "";
-};
-
-onMounted(() => {
-  setTooltip(store.bootstrap);
-});
-</script>
-
-
-
 <template>
-  <section class="py-lg-5">
-    <div class="container rounded-container">
+  <section class="">
+    <div class="rounded-container  ">
       <div class="row">
         <div class="col">
-          <div class="card box-shadow-xl overflow-hidden mb-5 rounded">
+          <div class="card box-shadow-xl overflow-hidden mb-5 rounded pb-3">
             <div class="row">
-              <div
-                  class="col-lg-5 position-relative bg-cover px-0 rounded-container"
-                  :style="{ backgroundImage: `url(${bgContact})` }"
-                  loading="lazy"
-              >
-                <div class="z-index-2 text-center d-flex h-100 w-100 d-flex m-auto justify-content-center rounded">
-                  <div class="mask bg-gradient-dark opacity-5 rounded"></div>
-                  <div class="p-5 ps-sm-8 position-relative text-start my-auto z-index-2 rounded">
+              <div class="col-lg-6 position-relative bg-cover px-0 rounded-container m-5 p-5" loading="lazy">
+                <div class="z-index-0 text-center d-flex h-100 w-100 d-flex m-auto justify-content-left rounded">
+                  <div class="mask bg-gradient-dark opacity-8 "></div>
+                  <div class="p-5  position-relative text-start rounded">
                     <h3 class="text-white">Registračný formulár</h3>
-                    <p class="text-white opacity-8 mb-4">
-                      Vyberte si prednášky na ktorých sa chcete zúčastniť
-                    </p>
-
+                    <p class="text-white opacity-9 mb-4">Vyberte si prednášky, na ktorých sa chcete zúčastniť</p>
                     <div class="row">
-                      <div class="col-md-12 mb-3">
-                        <label class="text-white opacity-8" for="stageDropdown">Vyberte Stage</label>
+                      <div class="col-lg-12 col-md-12 mb-3">
+                        <label class="text-white opacity-8 " for="stageDropdown">Vyberte Stage</label>
                         <select id="stageDropdown" class="form-control rounded-input" v-model="selectedStage">
                           <option value="">Vyberte Stage</option>
-                          <option value="softDevStage">Soft Dev Stage</option>
-                          <option value="aiDataStage">AI and Data Stage</option>
+                          <option v-for="stage in stages" :key="stage.id" :value="stage.id">{{ stage.name }}</option>
                         </select>
                       </div>
                     </div>
 
-                    <div class="row">
-                      <div v-if="selectedStage === 'softDevStage'" class="col-md-12 mb-3">
-                        <label class="text-white opacity-8" for="dropdown1">Vyberte prednášku</label>
-                        <select id="dropdown1" class="form-control rounded-input" v-model="selectedLecture1">
-                          <option value="">Vyberte prednášku</option>
-                          <option value="lecture1">Prednáška 1</option>
-                          <option value="lecture2">Prednáška 2</option>
-                          <option value="lecture3">Prednáška 3</option>
-                        </select>
-                      </div>
-
-                      <div v-if="selectedStage === 'aiDataStage'" class="col-md-12 mb-3">
-                        <label class="text-white opacity-8" for="dropdown2">AI and Data Stage</label>
-                        <select id="dropdown2" class="form-control rounded-input" v-model="selectedLecture2">
-                          <option value="">Vyberte prednášku</option>
-                          <option value="lecture4">AI Stage</option>
-                          <option value="lecture5">Data Stage</option>
-                          <option value="lecture6">Extra Stage</option>
-                          <option value="lecture7">Special Stage</option>
-                          <option value="lecture8">Advanced Stage</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div v-if="selectedLecture1 && lectureInfo1" class="bg-white text-dark p-3 mt-3 rounded-container">
-                      <p>{{ lectureInfo1 }}</p>
-                      <p>{{ lectures[selectedLecture1].time }}</p>
-                      <div class="d-flex justify-content-end">
-                        <MaterialButton
-                            variant="gradient"
-                            color="success"
-                            @click="addLecture(selectedLecture1)"
-                            class="mb-0 rounded-button"
+                    <div v-if="selectedStage" class="col-md-12 mb-3">
+                      <label class="text-white opacity-8" for="dropdown">Vyberte prednášku</label>
+                      <select id="dropdown" class="form-control rounded-input" v-model="selectedLecture">
+                        <option value="">Vyberte prednášku</option>
+                        <option
+                            v-for="talk in timeSlots.filter(ts => ts.stage_id === selectedStage).map(ts => ts.talk)"
+                            :key="talk.id"
+                            :value="talk.id"
                         >
-                          Chcem sa zúčastniť
-                        </MaterialButton>
-                      </div>
+                          {{ talk.title }}
+                        </option>
+                      </select>
                     </div>
 
-                    <div v-if="selectedLecture2 && lectureInfo2" class="bg-white text-dark p-3 mt-3 rounded-container">
-                      <p>{{ lectureInfo2 }}</p>
-                      <p>{{ lectures[selectedLecture2].time }}</p>
+                    <div v-if="selectedLecture && speakerInfo" class="bg-white text-dark p-3 mt-3 rounded-container">
+                      <h5>{{ speakerInfo.first_name }} {{ speakerInfo.last_name }}</h5>
+                      <p>{{ getLectureTitle(selectedLecture) }}</p>
+                      <p>{{ getLectureDescription(selectedLecture) }}</p>
+                      <p v-if="getLectureTime(selectedLecture)">
+                        <strong>Time:</strong> {{ getLectureTime(selectedLecture) }}
+                      </p>
                       <div class="d-flex justify-content-end">
+
                         <MaterialButton
                             variant="gradient"
                             color="success"
-                            @click="addLecture(selectedLecture2)"
+                            @click="addLecture(selectedLecture)"
                             class="mb-0 rounded-button"
                         >
                           Chcem sa zúčastniť
@@ -173,7 +60,7 @@ onMounted(() => {
                       <p>{{ conflictMessage }}</p>
                       <div class="d-flex justify-content-end">
                         <button class="btn btn-danger rounded-button" @click="closeConflictMessage">
-                          Rozumiem
+                          Zavrieť
                         </button>
                       </div>
                     </div>
@@ -184,11 +71,10 @@ onMounted(() => {
                       <ul v-if="chosenLectures.length">
                         <li
                             v-for="lecture in chosenLectures"
-                            :key="lecture.name"
+                            :key="lecture.id"
                             class="d-flex justify-content-between align-items-center"
                         >
-                          <div>{{ lecture.name }}
-                          <p>{{ lecture.time }}</p></div>
+                          <div>{{ lecture.title }}</div>
                           <div>
                             <button
                                 class="btn btn-danger btn-sm rounded-button"
@@ -204,45 +90,27 @@ onMounted(() => {
                   </div>
                 </div>
               </div>
-              <div class="col-lg-7">
+
+              <!-- Adjusted form section -->
+              <div class="col-lg-5  bg-gradient-dark opacity-8 rounded">
                 <form class="p-3" id="contact-form" method="post">
                   <div class="card-header px-4 py-sm-5 py-3 rounded">
                     <h2>Osobné údaje</h2>
                     <p class="lead">
-                      Prosím vyplnite všetky polia ďalšie informácie vám budú
-                      zaslané na e-mailovú adresu
+                      Prosím vyplňte všetky polia. Ďalšie informácie vám budú zaslané na e-mailovú adresu.
                     </p>
                   </div>
                   <div class="card-body pt-1">
                     <div class="row">
                       <div class="col-md-12 pe-2 mb-3">
-                        <MaterialInput
-                            class="input-group-static mb-4 rounded-input"
-                            label="Meno"
-                            type="text"
-                            placeholder="Meno"
-                        />
-                      </div>
-                      <div class="col-md-12 pe-2 mb-3">
-                        <MaterialInput
-                            class="input-group-static mb-4 rounded-input"
-                            label="Priezvisko"
-                            type="text"
-                            placeholder="Priezvisko"
-                        />
-                      </div>
-                      <div class="col-md-12 pe-2 mb-3">
-                        <MaterialInput
-                            class="input-group-static mb-4 rounded-input"
-                            label="E-mail"
-                            type="email"
-                            placeholder="E-mail"
-                        />
+                        <!-- Form fields for personal data -->
                       </div>
                     </div>
                   </div>
                 </form>
               </div>
+              <!-- End adjusted form section -->
+
             </div>
           </div>
         </div>
@@ -253,6 +121,152 @@ onMounted(() => {
 
 
 
+<script setup>
+import { ref, onMounted, watch } from "vue";
+import axios from "axios";
+import MaterialButton from "@/components/MaterialButton.vue";
+
+const selectedStage = ref("");
+const selectedLecture = ref("");
+const lectureInfo = ref("");
+const chosenLectures = ref([]);
+const conflictMessage = ref("");
+const stages = ref([]);
+const talks = ref([]);
+const timeSlots = ref([]);
+const speakerInfo = ref(null);
+
+// Function to fetch speaker information
+const fetchSpeakerInfo = async (speakerId) => {
+  try {
+    const response = await axios.get(`http://localhost/projekt_backend/byte-unbound-backend/public/api/get-speaker-byId/${speakerId}`);
+    speakerInfo.value = response.data;
+  } catch (error) {
+    console.error("Error fetching speaker info:", error);
+  }
+};
+
+// Watch for changes in selectedLecture and fetch speaker info accordingly
+watch(selectedLecture, async (newValue) => {
+  if (newValue) {
+    const lecture = talks.value.find(t => t.id === newValue);
+    if (lecture) {
+      await fetchSpeakerInfo(lecture.speaker_id); // Assuming speaker_id is available in the talks data
+    }
+    lectureInfo.value = getLectureDescription(newValue);
+  } else {
+    lectureInfo.value = "";
+    speakerInfo.value = null;
+  }
+});
+
+// Function to check if lecture has time conflict
+const hasTimeConflict = (newLecture) => {
+  const newLectureSlot = timeSlots.value.find(ts => ts.talk_id === newLecture);
+  return chosenLectures.value.some((lecture) => {
+    const chosenSlot = timeSlots.value.find(ts => ts.talk_id === lecture.id);
+    return newLectureSlot.start_time === chosenSlot.start_time;
+  });
+};
+
+// Function to add a lecture to chosenLectures
+const addLecture = (lecture) => {
+  const lectureData = talks.value.find(t => t.id === lecture);
+  if (lectureData) {
+    if (chosenLectures.value.some((l) => l.id === lectureData.id)) {
+      conflictMessage.value = `Túto prednášku ste si už zvolili.`;
+    } else if (hasTimeConflict(lecture)) {
+      conflictMessage.value = `Nemôžete pridať prednášku ${lectureData.title}, pretože už máte inú prednášku v tom čase.`;
+    } else {
+      chosenLectures.value.push(lectureData);
+      lectureInfo.value = "";
+      conflictMessage.value = "";
+      selectedLecture.value = "";
+    }
+  }
+};
+
+// Function to remove a lecture from chosenLectures
+const removeLecture = (lecture) => {
+  chosenLectures.value = chosenLectures.value.filter((l) => l.id !== lecture.id);
+};
+
+// Function to close conflict message
+const closeConflictMessage = () => {
+  conflictMessage.value = "";
+  // Reset other relevant states as needed
+  lectureInfo.value = "";
+  selectedLecture.value = "";
+};
+
+// Function to fetch stages from API
+const fetchStages = async () => {
+  try {
+    const response = await axios.get(`${import.meta.env.VITE_API_ENDPOINT}/api/get-stages`);
+    stages.value = response.data;
+  } catch (error) {
+    console.error("Error fetching stages:", error);
+  }
+};
+
+// Function to fetch talks from API
+const fetchTalks = async () => {
+  try {
+    const response = await axios.get(`${import.meta.env.VITE_API_ENDPOINT}/api/get-talks`);
+    talks.value = response.data;
+  } catch (error) {
+    console.error("Error fetching talks:", error);
+  }
+};
+
+// Function to fetch time slots from API
+const fetchTimeSlots = async () => {
+  try {
+    const response = await axios.get(`${import.meta.env.VITE_API_ENDPOINT}/api/get-timeSlots`);
+    timeSlots.value = response.data;
+  } catch (error) {
+    console.error("Error fetching time slots:", error);
+  }
+};
+
+// Function to get lecture description
+const getLectureDescription = (lectureId) => {
+  const lecture = talks.value.find(t => t.id === lectureId);
+  return lecture ? lecture.description : "";
+};
+
+// Function to get lecture time
+const getLectureTime = (lectureId) => {
+  const timeSlot = timeSlots.value.find(ts => ts.talk_id === lectureId);
+  if (timeSlot) {
+    const startTime = new Date(timeSlot.start_time);
+    const endTime = new Date(timeSlot.end_time);
+
+    const formattedStartTime = `${startTime.getHours()}:${startTime.getMinutes().toString().padStart(2, '0')}`;
+    const formattedEndTime = `${endTime.getHours()}:${endTime.getMinutes().toString().padStart(2, '0')}`;
+
+    return `${formattedStartTime} - ${formattedEndTime}`;
+  }
+  return "";
+};
+
+// Function to get lecture title
+const getLectureTitle = (lectureId) => {
+  const lecture = talks.value.find(t => t.id === lectureId);
+  return lecture ? lecture.title : "";
+};
+
+// Lifecycle hook to fetch data on component mount
+onMounted(async () => {
+  try {
+    await fetchStages();
+    await fetchTalks();
+    await fetchTimeSlots();
+  } catch (error) {
+    console.error("Error during onMounted lifecycle:", error);
+  }
+});
+</script>
 
 <style scoped>
 .rounded {
