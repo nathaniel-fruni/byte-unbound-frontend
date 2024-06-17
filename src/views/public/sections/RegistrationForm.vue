@@ -1,175 +1,114 @@
-<template>
-  <section class="">
-    <div class="rounded-container  ">
-      <div class="row">
-        <div class="col">
-          <div class="card box-shadow-xl overflow-hidden mb-5 rounded pb-3">
-            <div class="row">
-              <div class="col-lg-6 position-relative bg-cover px-0 rounded-container m-5 p-5" loading="lazy">
-                <div class="z-index-0 text-center d-flex h-100 w-100 d-flex m-auto justify-content-left rounded">
-                  <div class="mask bg-gradient-dark opacity-8 "></div>
-                  <div class="p-5  position-relative text-start rounded">
-                    <h3 class="text-white">Registračný formulár</h3>
-                    <p class="text-white opacity-9 mb-4">Vyberte si prednášky, na ktorých sa chcete zúčastniť</p>
-                    <div class="row">
-                      <div class="col-lg-12 col-md-12 mb-3">
-                        <label class="text-white opacity-8 " for="stageDropdown">Vyberte Stage</label>
-                        <select id="stageDropdown" class="form-control rounded-input" v-model="selectedStage">
-                          <option value="">Vyberte Stage</option>
-                          <option v-for="stage in stages" :key="stage.id" :value="stage.id">{{ stage.name }}</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div v-if="selectedStage" class="col-md-12 mb-3">
-                      <label class="text-white opacity-8" for="dropdown">Vyberte prednášku</label>
-                      <select id="dropdown" class="form-control rounded-input" v-model="selectedLecture">
-                        <option value="">Vyberte prednášku</option>
-                        <option
-                            v-for="talk in timeSlots.filter(ts => ts.stage_id === selectedStage).map(ts => ts.talk)"
-                            :key="talk.id"
-                            :value="talk.id"
-                        >
-                          {{ talk.title }}
-                        </option>
-                      </select>
-                    </div>
-
-                    <div v-if="selectedLecture && speakerInfo" class="bg-white text-dark p-3 mt-3 rounded-container">
-                      <h5>{{ speakerInfo.first_name }} {{ speakerInfo.last_name }}</h5>
-                      <p>{{ getLectureTitle(selectedLecture) }}</p>
-                      <p>{{ getLectureDescription(selectedLecture) }}</p>
-                      <p v-if="getLectureTime(selectedLecture)">
-                        <strong>Time:</strong> {{ getLectureTime(selectedLecture) }}
-                      </p>
-                      <div class="d-flex justify-content-end">
-
-                        <MaterialButton
-                            variant="gradient"
-                            color="success"
-                            @click="addLecture(selectedLecture)"
-                            class="mb-0 rounded-button"
-                        >
-                          Chcem sa zúčastniť
-                        </MaterialButton>
-                      </div>
-                    </div>
-
-                    <!-- Red Block -->
-                    <div v-if="conflictMessage" class="bg-danger text-white p-3 mt-3 rounded-container">
-                      <p>{{ conflictMessage }}</p>
-                      <div class="d-flex justify-content-end">
-                        <button class="btn btn-danger rounded-button" @click="closeConflictMessage">
-                          Zavrieť
-                        </button>
-                      </div>
-                    </div>
-
-                    <!-- Green Block -->
-                    <div class="bg-white text-dark p-3 mt-8 rounded-container">
-                      <h5>Vybrané prednášky:</h5>
-                      <ul v-if="chosenLectures.length">
-                        <li
-                            v-for="lecture in chosenLectures"
-                            :key="lecture.id"
-                            class="d-flex justify-content-between align-items-center"
-                        >
-                          <div>{{ lecture.title }}</div>
-                          <div>
-                            <button
-                                class="btn btn-danger btn-sm rounded-button"
-                                @click="removeLecture(lecture)"
-                            >
-                              Odstrániť
-                            </button>
-                          </div>
-                        </li>
-                      </ul>
-                      <p v-else>Nemáte aktívne žiadne prednášky.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Adjusted form section -->
-              <div class="col-lg-5  bg-gradient-dark opacity-8 rounded">
-                <form class="p-3" id="contact-form" method="post">
-                  <div class="card-header px-4 py-sm-5 py-3 rounded">
-                    <h2>Osobné údaje</h2>
-                    <p class="lead">
-                      Prosím vyplňte všetky polia. Ďalšie informácie vám budú zaslané na e-mailovú adresu.
-                    </p>
-                  </div>
-                  <div class="card-body pt-1">
-                    <div class="row">
-                      <div class="col-md-12 pe-2 mb-3">
-                        <!-- Form fields for personal data -->
-                      </div>
-                    </div>
-                  </div>
-                </form>
-              </div>
-              <!-- End adjusted form section -->
-
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-</template>
-
-
-
 <script setup>
 import { ref, onMounted, watch } from "vue";
 import axios from "axios";
 import MaterialButton from "@/components/MaterialButton.vue";
 
-const selectedStage = ref("");
-const selectedLecture = ref("");
-const lectureInfo = ref("");
-const chosenLectures = ref([]);
-const conflictMessage = ref("");
+const first_name = ref("");
+const last_name = ref("");
+const email = ref("");
+const successMessage = ref("");
+
+const register = async () => {
+  try {
+    if (chosenLectures.value.length === 0) {
+      successMessage.value = "Neboli zvolené žiadne prednášky.";
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("first_name", first_name.value);
+    formData.append("last_name", last_name.value);
+    formData.append("email", email.value);
+    formData.append("talk_ids", JSON.stringify(chosenLectures.value.map(lecture => lecture.id)));
+
+    const response = await axios.post(`${import.meta.env.VITE_API_ENDPOINT}/api/register`, formData);
+
+    if (response.status === 201) {
+      successMessage.value = "Registrácia úspešná!";
+      resetForm();
+    } else {
+      if(response.status === 409 && response.data.talk) {
+        successMessage.value = "Plná kapacita pre prednášku: " + response.data.talk;
+      } else {
+        successMessage.value = response.data.message;
+      }
+      console.error("Registration failed with status:", response.status);
+    }
+  } catch (error) {
+    console.error("Error during registration:", error);
+  }
+};
+
 const stages = ref([]);
 const talks = ref([]);
 const timeSlots = ref([]);
+const selectedStage = ref("");
+const selectedLecture = ref("");
+const chosenLectures = ref([]);
+const lectureInfo = ref("");
 const speakerInfo = ref(null);
+const conflictMessage = ref("");
 
-// Function to fetch speaker information
+const fetchStages = async () => {
+  try {
+    const response = await axios.get(`${import.meta.env.VITE_API_ENDPOINT}/api/get-stages`);
+    stages.value = response.data;
+  } catch (error) {
+    console.error("Error fetching stages:", error);
+  }
+};
+
+const fetchTalks = async () => {
+  try {
+    const response = await axios.get(`${import.meta.env.VITE_API_ENDPOINT}/api/get-talks`);
+    talks.value = response.data;
+  } catch (error) {
+    console.error("Error fetching talks:", error);
+  }
+};
+
+const fetchTimeSlots = async () => {
+  try {
+    const response = await axios.get(`${import.meta.env.VITE_API_ENDPOINT}/api/get-timeSlots`);
+    timeSlots.value = response.data;
+  } catch (error) {
+    console.error("Error fetching time slots:", error);
+  }
+};
+
 const fetchSpeakerInfo = async (speakerId) => {
   try {
-    const response = await axios.get(`http://localhost/projekt_backend/byte-unbound-backend/public/api/get-speaker-byId/${speakerId}`);
+    const response = await axios.get(import.meta.env.VITE_API_ENDPOINT + `/api/get-speaker-byId/${speakerId}`);
     speakerInfo.value = response.data;
   } catch (error) {
     console.error("Error fetching speaker info:", error);
   }
 };
 
-// Watch for changes in selectedLecture and fetch speaker info accordingly
-watch(selectedLecture, async (newValue) => {
-  if (newValue) {
-    const lecture = talks.value.find(t => t.id === newValue);
-    if (lecture) {
-      await fetchSpeakerInfo(lecture.speaker_id); // Assuming speaker_id is available in the talks data
-    }
-    lectureInfo.value = getLectureDescription(newValue);
-  } else {
-    lectureInfo.value = "";
-    speakerInfo.value = null;
-  }
-});
-
-// Function to check if lecture has time conflict
-const hasTimeConflict = (newLecture) => {
-  const newLectureSlot = timeSlots.value.find(ts => ts.talk_id === newLecture);
-  return chosenLectures.value.some((lecture) => {
-    const chosenSlot = timeSlots.value.find(ts => ts.talk_id === lecture.id);
-    return newLectureSlot.start_time === chosenSlot.start_time;
-  });
+const getLectureDescription = (lectureId) => {
+  const lecture = talks.value.find(t => t.id === lectureId);
+  return lecture ? lecture.description : "";
 };
 
-// Function to add a lecture to chosenLectures
+const getLectureTime = (lectureId) => {
+  const timeSlot = timeSlots.value.find(ts => ts.talk_id === lectureId);
+  if (timeSlot) {
+    const startTime = new Date(timeSlot.start_time);
+    const endTime = new Date(timeSlot.end_time);
+
+    const formattedStartTime = `${startTime.getHours()}:${startTime.getMinutes().toString().padStart(2, '0')}`;
+    const formattedEndTime = `${endTime.getHours()}:${endTime.getMinutes().toString().padStart(2, '0')}`;
+
+    return `${formattedStartTime} - ${formattedEndTime}`;
+  }
+  return "";
+};
+
+const getLectureTitle = (lectureId) => {
+  const lecture = talks.value.find(t => t.id === lectureId);
+  return lecture ? lecture.title : "";
+};
+
 const addLecture = (lecture) => {
   const lectureData = talks.value.find(t => t.id === lecture);
   if (lectureData) {
@@ -186,77 +125,31 @@ const addLecture = (lecture) => {
   }
 };
 
-// Function to remove a lecture from chosenLectures
 const removeLecture = (lecture) => {
   chosenLectures.value = chosenLectures.value.filter((l) => l.id !== lecture.id);
 };
 
-// Function to close conflict message
+const hasTimeConflict = (newLecture) => {
+  const newLectureSlot = timeSlots.value.find(ts => ts.talk_id === newLecture);
+  return chosenLectures.value.some((lecture) => {
+    const chosenSlot = timeSlots.value.find(ts => ts.talk_id === lecture.id);
+    return newLectureSlot.start_time === chosenSlot.start_time;
+  });
+};
 const closeConflictMessage = () => {
   conflictMessage.value = "";
-  // Reset other relevant states as needed
   lectureInfo.value = "";
   selectedLecture.value = "";
 };
-
-// Function to fetch stages from API
-const fetchStages = async () => {
-  try {
-    const response = await axios.get(`${import.meta.env.VITE_API_ENDPOINT}/api/get-stages`);
-    stages.value = response.data;
-  } catch (error) {
-    console.error("Error fetching stages:", error);
-  }
+const resetForm = () => {
+  first_name.value = "";
+  last_name.value = "";
+  email.value = "";
+  selectedStage.value = "";
+  selectedLecture.value = "";
+  chosenLectures.value = [];
 };
 
-// Function to fetch talks from API
-const fetchTalks = async () => {
-  try {
-    const response = await axios.get(`${import.meta.env.VITE_API_ENDPOINT}/api/get-talks`);
-    talks.value = response.data;
-  } catch (error) {
-    console.error("Error fetching talks:", error);
-  }
-};
-
-// Function to fetch time slots from API
-const fetchTimeSlots = async () => {
-  try {
-    const response = await axios.get(`${import.meta.env.VITE_API_ENDPOINT}/api/get-timeSlots`);
-    timeSlots.value = response.data;
-  } catch (error) {
-    console.error("Error fetching time slots:", error);
-  }
-};
-
-// Function to get lecture description
-const getLectureDescription = (lectureId) => {
-  const lecture = talks.value.find(t => t.id === lectureId);
-  return lecture ? lecture.description : "";
-};
-
-// Function to get lecture time
-const getLectureTime = (lectureId) => {
-  const timeSlot = timeSlots.value.find(ts => ts.talk_id === lectureId);
-  if (timeSlot) {
-    const startTime = new Date(timeSlot.start_time);
-    const endTime = new Date(timeSlot.end_time);
-
-    const formattedStartTime = `${startTime.getHours()}:${startTime.getMinutes().toString().padStart(2, '0')}`;
-    const formattedEndTime = `${endTime.getHours()}:${endTime.getMinutes().toString().padStart(2, '0')}`;
-
-    return `${formattedStartTime} - ${formattedEndTime}`;
-  }
-  return "";
-};
-
-// Function to get lecture title
-const getLectureTitle = (lectureId) => {
-  const lecture = talks.value.find(t => t.id === lectureId);
-  return lecture ? lecture.title : "";
-};
-
-// Lifecycle hook to fetch data on component mount
 onMounted(async () => {
   try {
     await fetchStages();
@@ -266,16 +159,171 @@ onMounted(async () => {
     console.error("Error during onMounted lifecycle:", error);
   }
 });
+
+watch(selectedLecture, async (newValue) => {
+  if (newValue) {
+    const lecture = talks.value.find(t => t.id === newValue);
+    if (lecture) {
+      await fetchSpeakerInfo(lecture.speaker_id);
+    }
+    lectureInfo.value = getLectureDescription(newValue);
+  } else {
+    lectureInfo.value = "";
+    speakerInfo.value = null;
+  }
+});
 </script>
 
+<template>
+  <section class="">
+    <div class="rounded-container  ">
+      <div class="row">
+        <div class="col">
+          <div class="card box-shadow-xl overflow-hidden  rounded ">
+            <div class="row">
+              <div class="col-lg-7 position-relative " loading="lazy">
+                <div class="z-index-0 text-center d-flex h-100 w-100 d-flex m-auto justify-content-left rounded">
+                  <div class="mask bg-gradient-dark"></div>
+                  <div class="p-5 col-12  position-relative text-start rounded">
+                    <h3 class="text-white">Registračný formulár</h3>
+                    <p class="text-white opacity-9 mb-4">Vyberte si prednášky, na ktorých sa chcete zúčastniť</p>
+
+                    <div class="mb-3 custom-input">
+                      <label class="text-white">Vyberte stage</label>
+                      <select id="stageDropdown" class="form-control rounded-input text-white" v-model="selectedStage">
+                        <option v-for="stage in stages" :key="stage.id" :value="stage.id" class="text-dark">{{ stage.name }}</option>
+                      </select>
+                    </div>
+
+                    <div v-if="selectedStage" class="mb-3 custom-input">
+                      <label class="text-white">Vyberte prednášku</label>
+                      <select v-model="selectedLecture" class="form-control text-white" required>
+                        <option
+                            class="text-dark"
+                            v-for="talk in timeSlots.filter(ts => ts.stage_id === selectedStage).map(ts => ts.talk)"
+                            :key="talk.id"
+                            :value="talk.id"
+                        >
+                          {{ talk.title }}
+                        </option>
+                      </select>
+                    </div>
+
+                    <div v-if="selectedLecture && speakerInfo" class="bg-white text-dark p-3 mt-3 rounded-3">
+                      <h5>{{ getLectureTitle(selectedLecture) }}</h5>
+                      <p class="text-secondary text-bold">{{ speakerInfo.first_name }} {{ speakerInfo.last_name }}</p>
+                      <p>{{ getLectureDescription(selectedLecture) }}</p>
+                      <p v-if="getLectureTime(selectedLecture)">
+                        <strong>Čas:</strong> {{ getLectureTime(selectedLecture) }}
+                      </p>
+                      <div class="d-flex justify-content-end">
+                        <MaterialButton
+                            variant="gradient"
+                            color="dark"
+                            @click="addLecture(selectedLecture)"
+                            class="mb-0 rounded-button"
+                        >
+                          Chcem sa zúčastniť
+                        </MaterialButton>
+                      </div>
+                    </div>
+
+                    <div v-if="conflictMessage" class="bg-danger text-white p-3 mt-3 rounded-container">
+                      <p>{{ conflictMessage }}</p>
+                      <div class="d-flex justify-content-end">
+                        <button class="btn btn-danger rounded-button" @click="closeConflictMessage">
+                          Zavrieť
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="bg-white text-dark p-3 mt-6 rounded-3">
+                      <h5>Vybrané prednášky:</h5>
+                      <ul v-if="chosenLectures.length">
+                        <li
+                            v-for="lecture in chosenLectures"
+                            :key="lecture.id"
+                            class="d-flex  align-items-center"
+                        >
+                          <p class="text-secondary text-bold">{{ getLectureTime(lecture.id) }}</p>
+                          <p class="px-3">{{ lecture.title }}</p>
+                          <div>
+                            <button
+                                class="btn btn-danger btn-sm rounded-button"
+                                @click="removeLecture(lecture)"
+                            >
+                              Odstrániť
+                            </button>
+                          </div>
+                        </li>
+                      </ul>
+                      <p v-else>Nemáte aktívne žiadne prednášky.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-5 ">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-12 mb-3 p-2">
+                      <div>
+                        <form class="p-3" id="contact-form" @submit.prevent="register" role="form">
+                          <div class="card-header px-4 py-sm-5 py-3">
+                            <h2>Osobné údaje</h2>
+                            <p class="lead">Vyplňte potrebné údaje. Ďalšie informácie Vám budú zaslané na zadanú e-mailovú adresu.</p>
+                          </div>
+                          <div class="card-body pt-1">
+                            <div class="row">
+                              <div class="mb-3 custom-input">
+                                <input type="text" v-model="first_name" class="form-control" placeholder="Meno" required />
+                              </div>
+                              <div class="mb-3 custom-input">
+                                <input type="text" v-model="last_name" class="form-control" placeholder="Priezvisko" required />
+                              </div>
+                              <div class="mb-3 custom-input">
+                                <input type="email" v-model="email" class="form-control" placeholder="Email" required />
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-md-6 text-center ms-auto">
+                                <MaterialButton
+                                    variant="gradient"
+                                    color="dark"
+                                    type="submit"
+                                    class="mb-0"
+                                >Registrovať</MaterialButton
+                                >
+                              </div>
+                            </div>
+                          </div>
+                          <div v-if="successMessage" class="alert alert-dark mt-3 text-white" role="alert">
+                            {{ successMessage }}
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</template>
 <style scoped>
-.rounded {
-  border-radius: 1rem !important;
+.custom-input .form-control {
+  border: none;
+  border-bottom: 1px solid #ced4da;
+  border-radius: 0;
+  box-shadow: none;
+  transition: border-color 0.3s ease-in-out;
 }
-.rounded-container {
-  border-radius: 1rem !important;
-}
-.rounded-button {
-  border-radius: 2rem !important;
+
+.custom-input .form-control:focus {
+  border-bottom: 1px solid #495057;
+  box-shadow: none;
 }
 </style>
