@@ -21,21 +21,33 @@ const register = async () => {
     formData.append("email", email.value);
     formData.append("talk_ids", JSON.stringify(chosenLectures.value.map(lecture => lecture.id)));
 
-    const response = await axios.post(`${import.meta.env.VITE_API_ENDPOINT}/api/register`, formData);
+    const response = await axios.post(import.meta.env.VITE_API_ENDPOINT + '/api/register-attendee',
+        formData
+    );
 
     if (response.status === 201) {
       successMessage.value = "Registrácia úspešná!";
       resetForm();
-    } else {
-      if(response.status === 409 && response.data.talk) {
-        successMessage.value = "Plná kapacita pre prednášku: " + response.data.talk;
-      } else {
-        successMessage.value = response.data.message;
-      }
-      console.error("Registration failed with status:", response.status);
     }
   } catch (error) {
-    console.error("Error during registration:", error);
+    if (error.response) {
+      if (error.response.status === 409) {
+        if(error.response.data.talk) {
+          successMessage.value = error.response.data.message + error.response.data.talk;
+        } else {
+          successMessage.value = error.response.data.message;
+        }
+      } else if (error.response.status === 400) {
+        successMessage.value = "Invalid input for talk_ids.";
+      } else if (error.response.status === 500) {
+        successMessage.value = "Registration failed. Please try again later.";
+      } else {
+        successMessage.value = "An unexpected error occurred.";
+      }
+    } else {
+      console.error("Error during registration:", error);
+      successMessage.value = "An error occurred during registration.";
+    }
   }
 };
 
