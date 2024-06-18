@@ -31,9 +31,7 @@ const sidebarItems = ref([
   { text: 'Prednášky', route: 'manage-talks', icon: 'fa-chalkboard' },
   { text: 'Povedali o nás', route: 'manage-testimonials', icon: 'fa-newspaper' },
   { text: 'Galéria', route: '', icon: 'fa-images' },
-  { text: 'Pridať sponzora', route: '', icon: 'fa-handshake' },
-  { text: 'Pridať obsah', route: '', icon: 'fa-code' },
-  { text: 'Zoznam účastníkov', route: 'show-attendees', icon: 'fa-users' }
+  { text: 'Pridať obsah', route: '', icon: 'fa-code' }
 ]);
 </script>
 
