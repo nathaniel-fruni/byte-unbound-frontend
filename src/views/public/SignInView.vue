@@ -71,7 +71,7 @@ const signIn = async () => {
                       class="input-group-outline rounded-2 col-12 p-2 px-2 mb-3 text-sm"
                       placeholder="Email"
                       type="email"
-                      is-required="true"
+                      required
                   />
                   <input
                       id="password"
@@ -79,7 +79,7 @@ const signIn = async () => {
                       class="input-group-outline rounded-2 col-12 p-2 px-2 text-sm"
                       placeholder="Heslo"
                       type="password"
-                      is-required="true"
+                      required
                   />
                   <div class="text-center">
                     <MaterialButton
