@@ -26,7 +26,7 @@ const logout = async () => {
 };
 
 const sidebarItems = ref([
-  { text: 'Speakers', route: '', icon: 'fa-chalkboard-teacher' },
+  { text: 'Speakers', route: 'manage-speakers', icon: 'fa-chalkboard-teacher' },
   { text: 'Stage', route: '', icon: 'fa-tv' },
   { text: 'Prednášky', route: 'manage-talks', icon: 'fa-chalkboard' },
   { text: 'Povedali o nás', route: 'manage-testimonials', icon: 'fa-newspaper' },
