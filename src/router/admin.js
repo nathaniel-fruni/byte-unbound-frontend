@@ -1,6 +1,7 @@
 import Dashboard from '@/views/admin/DashboardView.vue';
 import AdminRegistrationView from '@/views/admin/AdminRegistrationView.vue';
 import ManageTestimonialsView from '@/views/admin/ManageTestimonialsView.vue'
+import AttendeesView from '@/views/admin/AttendeesView.vue'
 
 export default [
   {
@@ -23,6 +24,12 @@ export default [
         path: 'manage-testimonials',
         name: 'manage-testimonials',
         component: ManageTestimonialsView,
+        meta: { requiresAuth: true },
+      },
+      {
+        path: 'show-attendees',
+        name: 'show-attendees',
+        component: AttendeesView,
         meta: { requiresAuth: true },
       },
     ],
