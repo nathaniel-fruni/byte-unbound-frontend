@@ -87,7 +87,7 @@ onMounted(async () => {
           <ul class="flex-column ms-n3 nav">
             <li class="nav-item">
               <RouterLink
-                :to="{ name: 'contact' }"
+                :to="{ name: 'registration' }"
                 class="nav-link d-flex cursor-pointer align-items-center"
               >
                 <span>registrácia</span>
