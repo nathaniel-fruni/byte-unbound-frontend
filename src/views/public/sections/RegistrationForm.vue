@@ -362,9 +362,10 @@ watch(selectedLecture, async (newValue) => {
       <p @click="toggleNewForm" class="text-lg ">Pre odhlásenie kliknite <span class=" text-dark text-bold hover-effect " style="cursor: pointer">sem.</span></p>
     </div>
 
-    <div v-if="showNewForm" class="mt-4">
+    <div v-if="showNewForm" class="d-flex justify-content-center align-items-center">
+      <div class="col-4">
       <form @submit.prevent="unregister">
-        <div class="mb-3 custom-input">
+        <div class="mb-3 custom-input ">
           <input type="text" v-model="unregister_email" class="form-control" placeholder="Email registrácie" required />
         </div>
         <div class="mb-3 custom-input">
@@ -375,13 +376,13 @@ watch(selectedLecture, async (newValue) => {
               variant="gradient"
               color="dark"
               type="submit"
-              class="mb-0 col-9"
+              class="mb-0 col-4"
           >Odregistrovať</MaterialButton>
         </div>
         <div v-if="successMessageUnregister" class="alert alert-dark mt-3 text-white" role="alert">
           {{ successMessageUnregister }}
         </div>
-      </form>
+      </form></div>
     </div>
   </section>
 
