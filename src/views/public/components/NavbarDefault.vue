@@ -141,7 +141,7 @@ watch(
           </li>
           <li class="nav-item dropdown dropdown-hover mx-2">
             <RouterLink
-              :to="{ name: 'program' }"
+              :to="{ name: 'registration' }"
               class="nav-link d-flex cursor-pointer align-items-center"
             >
               <span>Registrácia</span>
