@@ -34,7 +34,7 @@ const fetchUsers = async () => {
       import.meta.env.VITE_API_ENDPOINT + `/api/get-users/${selectedConferenceId.value}`
     );
     users.value = response.data;
-    activeUser.value = null; // Reset active user on conference change
+    activeUser.value = null;
   } catch (error) {
     console.error("Error fetching user data:", error);
   }
@@ -55,14 +55,10 @@ onMounted(async () => {
 </script>
 
 <template>
-  <section class="">
-    <div class="col-lg-12 bg-gradient-dark rounded-3 p-2 px-2 shadow-blur mb-3 text-center">
-      <h3 class="text-white">Zoznam účastníkov</h3>
-    </div>
-
-    <div class="container">
+  <section>
+    <div class="container-fluid px-3">
       <div class="row justify-content-center">
-        <div class="container-fluid mb-4 card card-body shadow-xl mx-3 mx-md-4 p-4 d-flex justify-content-center align-content-center">
+        <div class="container mb-4 card card-body shadow-xl mx-3 mx-md-4 p-4 d-flex justify-content-center align-content-center">
           <div class="row justify-content-center text-center py-2">
             <div class="col-lg-6 mx-auto">
               <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
@@ -75,7 +71,7 @@ onMounted(async () => {
           </div>
 
           <div class="col-lg-12 text">
-            <div class="card card-body bg-gradient-white">
+            <div class="card card-body bg-gradient-white shadow-dark rounded-3">
               <div class="table-responsive">
                 <table class="table align-items-center text-center">
                   <thead>
@@ -122,6 +118,26 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+.container-fluid {
+  max-width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.row {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+.container {
+  max-width: 100%;
+}
+
+.btn-group {
+  display: flex;
+  justify-content: center;
+}
+
 @media (max-width: 576px) {
   .form-check-inline {
     display: block;

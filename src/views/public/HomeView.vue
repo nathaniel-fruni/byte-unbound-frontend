@@ -3,8 +3,8 @@ import { onMounted, onUnmounted, ref} from 'vue';
 import { RouterLink } from 'vue-router'
 import NavbarDefault from "./components/NavbarDefault.vue";
 import DefaultFooter from "./components/FooterDefault.vue";
-import Header from "./sections/Header.vue";
-import MainInfo from "./sections/MainInfo.vue";
+import Header from "./components/Header.vue";
+import MainInfo from "./components/MainInfo.vue";
 import PresentationTestimonials from "./sections/PresentationTestimonials.vue";
 import vueMkHeader from "@/assets/img/backgrounds/main-background.jpg";
 import Speakers from '@/views/public/sections/Speakers.vue';

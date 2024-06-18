@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
-import Header from "@/views/public/sections/Header.vue";
+import Header from "@/views/public/components/Header.vue";
 import MaterialButton from "@/components/MaterialButton.vue";
 import NavbarDefault from '@/views/public/components/NavbarDefault.vue';
 
@@ -72,6 +72,7 @@ const signIn = async () => {
                       placeholder="Email"
                       type="email"
                       required
+
                   />
                   <input
                       id="password"
