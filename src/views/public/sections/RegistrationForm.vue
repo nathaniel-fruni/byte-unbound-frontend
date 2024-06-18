@@ -46,8 +46,26 @@ const register = async () => {
       }
     } else {
       console.error("Error during registration:", error);
-      successMessage.value = "An error occurred during registration.";
+      successMessage.value = "Neočakávana chyba.";
     }
+  }
+};
+
+const unregister = async () => {
+  try {
+    const formData = new FormData();
+    formData.append("email", unregister_email.value);
+    formData.append("verification_code", verification_code.value);
+
+    const response = await axios.post(import.meta.env.VITE_API_ENDPOINT + '/api/unregister-attendee', formData);
+
+    if (response.status === 201) {
+      successMessageUnregister.value = "Odhlásenie úspešné!";
+      resetUnregisterForm();
+    }
+  } catch (error) {
+    console.error("Error during registration:", error);
+    successMessage.value = "Odhlásenie neúspešné.";
   }
 };
 
@@ -160,6 +178,23 @@ const resetForm = () => {
   selectedStage.value = "";
   selectedLecture.value = "";
   chosenLectures.value = [];
+  successMessage.value = "";
+};
+
+const showNewForm = ref(false);
+const unregister_email = ref("");
+const verification_code = ref("");
+const successMessageUnregister = ref("");
+const toggleNewForm = () => {
+  showNewForm.value = !showNewForm.value;
+  if (!showNewForm.value) {
+    resetUnregisterForm();
+  }
+};
+const resetUnregisterForm = () => {
+  unregister_email.value = "";
+  verification_code.value = "";
+  successMessageUnregister.value = "";
 };
 
 onMounted(async () => {
@@ -323,7 +358,33 @@ watch(selectedLecture, async (newValue) => {
         </div>
       </div>
     </div>
+    <div class="p-4 text-center">
+      <p @click="toggleNewForm" class="text-lg ">Pre odhlásenie kliknite <span class=" text-dark text-bold hover-effect " style="cursor: pointer">sem.</span></p>
+    </div>
+
+    <div v-if="showNewForm" class="mt-4">
+      <form @submit.prevent="unregister">
+        <div class="mb-3 custom-input">
+          <input type="text" v-model="unregister_email" class="form-control" placeholder="Email registrácie" required />
+        </div>
+        <div class="mb-3 custom-input">
+          <input type="text" v-model="unregister_email" class="form-control" placeholder="Verifikačný kód zaslaný na email" required />
+        </div>
+        <div class="text-center">
+          <MaterialButton
+              variant="gradient"
+              color="dark"
+              type="submit"
+              class="mb-0 col-9"
+          >Odregistrovať</MaterialButton>
+        </div>
+        <div v-if="successMessageUnregister" class="alert alert-dark mt-3 text-white" role="alert">
+          {{ successMessageUnregister }}
+        </div>
+      </form>
+    </div>
   </section>
+
 </template>
 <style scoped>
 .custom-input .form-control {
@@ -337,5 +398,8 @@ watch(selectedLecture, async (newValue) => {
 .custom-input .form-control:focus {
   border-bottom: 1px solid #495057;
   box-shadow: none;
+}
+.hover-effect:hover {
+  text-decoration: underline;
 }
 </style>
