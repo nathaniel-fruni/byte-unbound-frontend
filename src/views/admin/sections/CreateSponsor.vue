@@ -45,7 +45,7 @@ const handleFileUpload = (event) => {
 
 const addSponsor = async () => {
   try {
-    const token = document.cookie.replace(/(?:(?:^|.*;\s*)access_token\s*=\s*([^;]*).$)|^.*$/,"$1");
+    const token = document.cookie.replace(/(?:(?:^|.*;\s*)access_token\s*=\s*([^;]*).*$)|^.*$/,"$1");
 
     const formData = new FormData();
     formData.append('name', name.value);

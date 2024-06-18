@@ -75,7 +75,7 @@ const fetchTalks = async () => {
 
 const addTalk = async () => {
   try {
-    const token = document.cookie.replace(/(?:(?:^|.*;\s*)access_token\s*=\s*([^;]*).$)|^.*$/,"$1");
+    const token = document.cookie.replace(/(?:(?:^|.*;\s*)access_token\s*=\s*([^;]*).*$)|^.*$/,"$1");
 
     const response = await axios.post(
         import.meta.env.VITE_API_ENDPOINT + '/api/create-talk', {
@@ -106,7 +106,7 @@ const editTalk = async () => {
     if (min_capacity > capacity.value) {
       alert("Zadajte kapacitu väčšiu ako " + min_capacity);
     } else {
-      const token = document.cookie.replace(/(?:(?:^|.*;\s*)access_token\s*=\s*([^;]*).$)|^.*$/,"$1");
+      const token = document.cookie.replace(/(?:(?:^|.*;\s*)access_token\s*=\s*([^;]*).*$)|^.*$/,"$1");
 
       console.log(currentTalk.value.id);
 
@@ -140,7 +140,7 @@ const editTalk = async () => {
 
 const deleteTalk = async (talkId) => {
   try {
-    const token = document.cookie.replace(/(?:(?:^|.*;\s*)access_token\s*=\s*([^;]*).$)|^.*$/,"$1");
+    const token = document.cookie.replace(/(?:(?:^|.*;\s*)access_token\s*=\s*([^;]*).*$)|^.*$/,"$1");
 
     await axios.delete(
         import.meta.env.VITE_API_ENDPOINT + `/api/delete-talk/${talkId}`,
