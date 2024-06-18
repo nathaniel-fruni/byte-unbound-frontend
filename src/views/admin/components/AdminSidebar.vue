@@ -50,7 +50,7 @@ const sidebarItems = ref([
 
         <li class="py-2 px-lg-3 m-lg-2">
           <router-link class="text-white text-md m-3 me-2" :to="{ name: 'dashboard' }">
-            <i class="fas fa-pager text-center me-2"></i>
+            <i class="fas fa-th text-center me-2"></i>
             <span class="sidebar-text">Hlavný panel</span>
           </router-link>
         </li>
@@ -66,7 +66,7 @@ const sidebarItems = ref([
           <h3 class="text-white text-md px-3 me-2 sidebar-text">Možnosti</h3>
         </li>
         <li class="py-2 px-lg-3 m-lg-2">
-          <router-link class="text-white text-sm p-3" :to="{ name: '' }">
+          <router-link class="text-white text-sm p-3" :to="{ name: 'admin-registration' }">
             <i class="fas fa-user-plus text-center me-2"></i>
             <span class="sidebar-text">Pridať admina</span>
           </router-link>
