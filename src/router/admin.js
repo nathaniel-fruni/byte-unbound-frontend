@@ -1,7 +1,6 @@
 import Dashboard from '@/views/admin/DashboardView.vue';
 import AdminRegistrationView from '@/views/admin/AdminRegistrationView.vue';
 import ManageTestimonialsView from '@/views/admin/ManageTestimonialsView.vue'
-import AttendeesView from '@/views/admin/AttendeesView.vue'
 import ManageTalksView from "@/views/admin/ManageTalksView.vue";
 import ManageSpeakersView from "@/views/admin/ManageSpeakersView.vue";
 
