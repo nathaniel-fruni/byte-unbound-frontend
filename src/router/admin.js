@@ -29,12 +29,6 @@ export default [
         meta: { requiresAuth: true },
       },
       {
-        path: 'show-attendees',
-        name: 'show-attendees',
-        component: AttendeesView,
-        meta: { requiresAuth: true },
-      },
-      {
         path: 'manage-talks',
         name: 'manage-talks',
         component: ManageTalksView,
