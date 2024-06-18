@@ -32,17 +32,15 @@ const register = async () => {
   } catch (error) {
     if (error.response) {
       if (error.response.status === 409) {
-        if(error.response.data.talk) {
+        if (error.response.data.talk) {
           successMessage.value = error.response.data.message + error.response.data.talk;
         } else {
           successMessage.value = error.response.data.message;
         }
-      } else if (error.response.status === 400) {
-        successMessage.value = "Invalid input for talk_ids.";
       } else if (error.response.status === 500) {
-        successMessage.value = "Registration failed. Please try again later.";
+        successMessage.value = "Chyba pri posielaní emailu.";
       } else {
-        successMessage.value = "An unexpected error occurred.";
+        successMessage.value = error.response.data.message || "Neočakávana chyba.";
       }
     } else {
       console.error("Error during registration:", error);
@@ -65,7 +63,7 @@ const unregister = async () => {
     }
   } catch (error) {
     console.error("Error during registration:", error);
-    successMessage.value = "Odhlásenie neúspešné.";
+    successMessageUnregister.value = "Odhlásenie neúspešné.";
   }
 };
 
@@ -178,7 +176,6 @@ const resetForm = () => {
   selectedStage.value = "";
   selectedLecture.value = "";
   chosenLectures.value = [];
-  successMessage.value = "";
 };
 
 const showNewForm = ref(false);
@@ -194,7 +191,6 @@ const toggleNewForm = () => {
 const resetUnregisterForm = () => {
   unregister_email.value = "";
   verification_code.value = "";
-  successMessageUnregister.value = "";
 };
 
 onMounted(async () => {
@@ -369,14 +365,14 @@ watch(selectedLecture, async (newValue) => {
           <input type="text" v-model="unregister_email" class="form-control" placeholder="Email registrácie" required />
         </div>
         <div class="mb-3 custom-input">
-          <input type="text" v-model="unregister_email" class="form-control" placeholder="Verifikačný kód zaslaný na email" required />
+          <input type="text" v-model="verification_code" class="form-control" placeholder="Verifikačný kód zaslaný na email" required />
         </div>
         <div class="text-center">
           <MaterialButton
               variant="gradient"
               color="dark"
               type="submit"
-              class="mb-0 col-4"
+              class="mb-0 col-lg-4"
           >Odregistrovať</MaterialButton>
         </div>
         <div v-if="successMessageUnregister" class="alert alert-dark mt-3 text-white" role="alert">
