@@ -2,6 +2,8 @@ import Dashboard from '@/views/admin/DashboardView.vue';
 import AdminRegistrationView from '@/views/admin/AdminRegistrationView.vue';
 import ManageTestimonialsView from '@/views/admin/ManageTestimonialsView.vue'
 import AttendeesView from '@/views/admin/AttendeesView.vue'
+import ManageTalksView from '@/views/admin/ManageTalksView.vue'
+import ManageSpeakersView from '@/views/admin/ManageSpeakersView.vue'
 
 export default [
   {
@@ -30,6 +32,18 @@ export default [
         path: 'show-attendees',
         name: 'show-attendees',
         component: AttendeesView,
+        meta: { requiresAuth: true },
+      },
+      {
+        path: 'manage-talks',
+        name: 'manage-talks',
+        component: ManageTalksView,
+        meta: { requiresAuth: true },
+      },
+      {
+        path: 'manage-speakers',
+        name: 'manage-speakers',
+        component: ManageSpeakersView,
         meta: { requiresAuth: true },
       },
     ],

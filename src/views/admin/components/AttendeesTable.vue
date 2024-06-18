@@ -71,7 +71,7 @@ onMounted(async () => {
           </div>
 
           <div class="col-lg-12 text">
-            <div class="card card-body bg-gradient-white">
+            <div class="card card-body bg-gradient-white shadow-dark rounded-3">
               <div class="table-responsive">
                 <table class="table align-items-center text-center">
                   <thead>
