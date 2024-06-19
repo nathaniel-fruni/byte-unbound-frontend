@@ -26,11 +26,11 @@ const logout = async () => {
 };
 
 const sidebarItems = ref([
+  { text: 'Povedali o nás', route: 'manage-testimonials', icon: 'fa-newspaper' },
+  { text: 'Galéria', route: 'add-gallery', icon: 'fa-images' },
   { text: 'Speakers', route: 'manage-speakers', icon: 'fa-chalkboard-teacher' },
   { text: 'Stage', route: '', icon: 'fa-tv' },
   { text: 'Prednášky', route: 'manage-talks', icon: 'fa-chalkboard' },
-  { text: 'Povedali o nás', route: 'manage-testimonials', icon: 'fa-newspaper' },
-  { text: 'Galéria', route: '', icon: 'fa-images' },
   { text: 'Pridať obsah', route: '', icon: 'fa-code' }
 ]);
 </script>

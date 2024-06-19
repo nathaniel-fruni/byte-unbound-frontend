@@ -3,6 +3,7 @@ import AdminRegistrationView from '@/views/admin/AdminRegistrationView.vue';
 import ManageTestimonialsView from '@/views/admin/ManageTestimonialsView.vue'
 import ManageTalksView from "@/views/admin/ManageTalksView.vue";
 import ManageSpeakersView from "@/views/admin/ManageSpeakersView.vue";
+import AddGalleryView from "@/views/admin/AddGalleryView.vue";
 
 export default [
   {
@@ -37,6 +38,12 @@ export default [
         path: 'manage-speakers',
         name: 'manage-speakers',
         component: ManageSpeakersView,
+        meta: { requiresAuth: true},
+      },
+      {
+        path: 'add-gallery',
+        name: 'add-gallery',
+        component: AddGalleryView,
         meta: { requiresAuth: true},
       },
     ],

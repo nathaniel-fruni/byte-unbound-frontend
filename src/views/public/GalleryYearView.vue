@@ -41,7 +41,7 @@ const fetchImages = async () => {
 };
 
 const getImageUrl = (imageName) => {
-  return `${import.meta.env.VITE_API_ENDPOINT}/storage/images/gallery/${selectedYear.value}/${imageName}`;
+  return `${import.meta.env.VITE_API_ENDPOINT}/storage/images/gallery/${imageName}`;
 };
 
 const buildYearToGalleryIdMap = () => {
