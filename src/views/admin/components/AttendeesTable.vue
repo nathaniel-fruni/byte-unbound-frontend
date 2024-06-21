@@ -60,7 +60,7 @@ onMounted(async () => {
       <div class="row justify-content-center">
         <div class="container mb-4 card card-body shadow-xl mx-3 mx-md-4 p-4 d-flex justify-content-center align-content-center">
           <div class="row justify-content-center text-center py-2">
-            <div class="col-lg-6 mx-auto">
+            <div class="mx-auto">
               <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                 <div v-for="conference in conferences" :key="conference.id" class="form-check form-check-inline d-flex flex-column flex-sm-row">
                   <input class="btn-check" type="radio" name="conference" :id="'conference' + conference.id" :value="conference.id" v-model="selectedConferenceId" @change="handleConferenceChange">

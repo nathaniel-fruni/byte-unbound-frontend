@@ -29,9 +29,9 @@ const sidebarItems = ref([
   { text: 'Povedali o nás', route: 'manage-testimonials', icon: 'fa-newspaper' },
   { text: 'Galéria', route: 'add-gallery', icon: 'fa-images' },
   { text: 'Speakers', route: 'manage-speakers', icon: 'fa-chalkboard-teacher' },
-  { text: 'Stage', route: '', icon: 'fa-tv' },
   { text: 'Prednášky', route: 'manage-talks', icon: 'fa-chalkboard' },
-  { text: 'Pridať obsah', route: '', icon: 'fa-code' }
+  { text: 'Stage', route: 'manage-stages', icon: 'fa-tv' },
+  { text: 'Pridať obsah', route: 'add-content', icon: 'fa-code' }
 ]);
 </script>
 
@@ -42,7 +42,7 @@ const sidebarItems = ref([
         <li class="mt-3 pb-2 text-center">
           <router-link class="text-white text-bold text-md" :to="{ name: 'dashboard' }">
             <i class="fas fa-terminal text-center"></i>
-            <h3 class="text-white text-md mb-0">byteUnbound - Admin</h3>
+            <h3 class="text-white text-md mb-0">nConnect - Admin</h3>
           </router-link>
         </li>
 

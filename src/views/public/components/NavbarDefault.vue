@@ -77,7 +77,7 @@ watch(
         title="Designed and Coded by Creative Tim"
         data-placement="bottom"
       >
-        byteUnbound
+        nConnect
       </RouterLink>
       <button
         class="navbar-toggler shadow-none ms-2"

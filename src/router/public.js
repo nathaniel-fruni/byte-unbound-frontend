@@ -6,6 +6,8 @@ import GalleryYearView from '@/views/public/GalleryYearView.vue';
 import ContactView from "../views/public/ContactView.vue";
 import SignInView from '@/views/public/SignInView.vue';
 import RegistrationView from '@/views/public/RegistrationView.vue';
+import PageListView from '@/views/public/PageListView.vue'
+import PageView from '@/views/public/PageView.vue'
 
 export default [
   {
@@ -51,6 +53,16 @@ export default [
         path: "sign-in",
         name: "sign-in",
         component: SignInView,
+      },
+      {
+        path: "page-list",
+        name: "page-list",
+        component: PageListView,
+      },
+      {
+        path: "page/:id",
+        name: "page",
+        component: PageView,
       },
     ],
   },

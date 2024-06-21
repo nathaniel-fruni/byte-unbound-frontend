@@ -4,6 +4,8 @@ import ManageTestimonialsView from '@/views/admin/ManageTestimonialsView.vue'
 import ManageTalksView from "@/views/admin/ManageTalksView.vue";
 import ManageSpeakersView from "@/views/admin/ManageSpeakersView.vue";
 import AddGalleryView from "@/views/admin/AddGalleryView.vue";
+import ManageStagesView from '@/views/admin/ManageStagesView.vue'
+import AddContentView from '@/views/admin/AddContentView.vue'
 
 export default [
   {
@@ -44,6 +46,18 @@ export default [
         path: 'add-gallery',
         name: 'add-gallery',
         component: AddGalleryView,
+        meta: { requiresAuth: true},
+      },
+      {
+        path: 'manage-stages',
+        name: 'manage-stages',
+        component: ManageStagesView,
+        meta: { requiresAuth: true},
+      },
+      {
+        path: 'add-content',
+        name: 'add-content',
+        component: AddContentView,
         meta: { requiresAuth: true},
       },
     ],

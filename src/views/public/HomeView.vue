@@ -97,7 +97,7 @@ onUnmounted(() => {
     <div class="text-center">
       <RouterLink :to="{ name: 'program' }"><span class="m-3 col-lg-3 col-sm-12 btn btn-sm mb-0 bg-gradient-dark px-5 py-3 mt-4">Program</span></RouterLink>
       <RouterLink :to="{ name: 'speakers' }"><span class="m-3 col-lg-3 col-sm-12 btn btn-sm mb-0 bg-gradient-dark px-5 py-3 mt-4">Speakers</span></RouterLink>
-      <RouterLink :to="{ name: 'speakers' }"><span class="m-3 col-lg-3 col-sm-12 btn btn-sm mb-0 bg-gradient-dark px-5 py-3 mt-4">Registrácia</span></RouterLink>
+      <RouterLink :to="{ name: 'registration' }"><span class="m-3 col-lg-3 col-sm-12 btn btn-sm mb-0 bg-gradient-dark px-5 py-3 mt-4">Registrácia</span></RouterLink>
     </div>
 
     <div>
@@ -138,7 +138,7 @@ onUnmounted(() => {
           <div class="d-flex justify-content-center mt-3 flex-wrap">
             <div v-for="sponsor in sponsors" :key="sponsor.id" class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3 d-flex justify-content-center">
               <a :href="sponsor.website" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="sponsor.name">
-                <img :src="getSponsorImageUrl(sponsor.logo)" :alt="sponsor.name" class="img-fluid sponsor-logo" />
+                <img :src="getSponsorImageUrl(sponsor.logo)" :alt="sponsor.name" class="w-100 sponsor-logo" />
               </a>
             </div>
           </div>
@@ -169,7 +169,8 @@ onUnmounted(() => {
 
 <style>
 .sponsor-logo {
-  max-height: 90px;
+  height: 100px;
+  width: 100px;
   object-fit: contain;
 }
 </style>
