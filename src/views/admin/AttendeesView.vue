@@ -1,6 +1,6 @@
 <script setup>
 
-import AttendeesTable from '@/views/admin/components/AttendeesTable.vue'
+import AttendeesTable from '@/views/admin/sections/AttendeesTable.vue'
 </script>
 
 <template >

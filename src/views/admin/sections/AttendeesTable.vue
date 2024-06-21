@@ -60,15 +60,20 @@ onMounted(async () => {
       <div class="row justify-content-center">
         <div class="container mb-4 card card-body shadow-xl mx-3 mx-md-4 p-4 d-flex justify-content-center align-content-center">
           <div class="row justify-content-center text-center py-2">
-            <div class="mx-auto">
+            <div class="col-auto">
               <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                <div v-for="conference in conferences" :key="conference.id" class="form-check form-check-inline d-flex flex-column flex-sm-row">
-                  <input class="btn-check" type="radio" name="conference" :id="'conference' + conference.id" :value="conference.id" v-model="selectedConferenceId" @change="handleConferenceChange">
-                  <label class="btn btn-outline-dark" :for="'conference' + conference.id">{{ conference.title }}</label>
+                <div class="row justify-content-center">
+                  <div v-for="conference in conferences" :key="conference.id" class="col-lg-4 col-sm-12">
+                    <div class="form-check">
+                      <input class="btn-check" type="radio" name="conference" :id="'conference' + conference.id" :value="conference.id" v-model="selectedConferenceId" @change="handleConferenceChange">
+                      <label class="btn btn-outline-dark w-100 mb-2" :for="'conference' + conference.id">{{ conference.title }}</label>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+
 
           <div class="col-lg-12 text">
             <div class="card card-body bg-gradient-white shadow-dark rounded-3">
@@ -92,10 +97,14 @@ onMounted(async () => {
                       <td class="text-dark">{{formatDateTime(user.registration[0].registered_at)}}</td>
                     </tr>
                     <template v-if="activeUser === user">
+                      <tr>
+                        <td colspan="3" class="text-center">
+                          <p class="text-wrap text-bold text-uppercase text-sm mb-2 mt-3">Registrované prednášky</p>
+                        </td>
+                      </tr>
                       <tr v-for="registration in user.registration" :key="registration.id">
-                        <td colspan="4" class="text-center">
+                        <td colspan="3" class="text-center">
                           <div>
-                            <p class="text-wrap text-bold text-uppercase text-sm mb-2">Registrované prednášky</p>
                             <p class="text-wrap text-sm">
                               {{ registration.talk.title }}
                               <i v-if="registration.attended === 1" class="fas fa-check text-success px-2"></i>
