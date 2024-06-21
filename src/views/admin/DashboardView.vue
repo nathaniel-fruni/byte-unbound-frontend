@@ -35,7 +35,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="d-flex justify-content-center container-fluid">
+  <div class="d-flex justify-content-center metric_cards">
     <MetricCard
       title="Počet účastníkov"
       :metricValue="registrationsMetric.current_year_unique_users"
@@ -68,7 +68,7 @@ onMounted(async () => {
 
   <div class="d-lg-flex d-sm-block">
     <div class="col-lg-8 col-md-12 mb-4">
-      <h3 class="text-center"><i class="fas fa-users me-2"></i>Zoznam účatníkov</h3>
+      <h3 class="text-center"><i class="fas fa-users me-2"></i>Zoznam účastníkov</h3>
       <AttendeesTable />
     </div>
     <div class="col-lg-4 col-md-12 mb-4">
@@ -77,3 +77,10 @@ onMounted(async () => {
     </div>
   </div>
 </template>
+<style>
+@media (max-width: 768px) {
+  .metric_cards {
+    flex-direction: column;
+  }
+}
+</style>

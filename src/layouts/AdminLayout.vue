@@ -25,4 +25,10 @@ onUnmounted(() => {
   margin-left: 250px;
   padding: 20px;
 }
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 70px;
+
+  }
+}
 </style>

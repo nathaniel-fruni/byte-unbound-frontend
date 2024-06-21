@@ -45,10 +45,10 @@ const registerAdmin = async () => {
 
 <template>
   <section>
-    <div class="container text-center d-flex justify-content-center align-content-center vh-100">
+    <div class="container text-center d-flex justify-content-center align-content-center vh-100 ">
       <div class="row justify-content-center">
         <div class="col">
-          <div class="card box-shadow-xl overflow-hidden mb-5 col-12">
+          <div class="card box-shadow-xl overflow-hidden mb-5">
             <div class="row">
               <div>
                 <form class="p-3" id="contact-form" @submit.prevent="registerAdmin" role="form">

@@ -53,8 +53,9 @@ onMounted(() => {
 </script>
 
 <template>
+
   <aside class="m-2 rounded-3 bg-gradient-dark">
-    <nav>
+    <nav >
       <ul class="list-unstyled">
         <li class="mt-3 pb-2 text-center options">
           <router-link class="text-white text-bold text-md" :to="{ name: 'dashboard' }" @click="resetToDefault">
