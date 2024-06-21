@@ -93,6 +93,14 @@ onMounted(async () => {
                 <span>registrácia</span>
               </RouterLink>
             </li>
+            <li class="nav-item">
+              <RouterLink
+                :to="{ name: 'page-list' }"
+                class="nav-link d-flex cursor-pointer align-items-center"
+              >
+                <span>ochrana osobných údajov</span>
+              </RouterLink>
+            </li>
           </ul>
         </div>
 
@@ -136,7 +144,7 @@ onMounted(async () => {
             </li>
             <li class="nav-item">
               <span class="nav-link">
-                info@byteunbound.sk
+                {{conference.contact_email}}
               </span>
             </li>
             <li class="nav-item">

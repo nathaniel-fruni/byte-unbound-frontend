@@ -10,6 +10,7 @@ const selectedConferenceId = ref(null);
 const showNewForm = ref(false);
 const isEditMode = ref(false);
 const currentTestimonial = ref(null);
+const pictureFileName = ref("");
 
 const name = ref("");
 const image = ref("");
@@ -58,6 +59,7 @@ const resetForm = () => {
   testimonal_text.value = "";
   currentTestimonial.value = null;
   isEditMode.value = false;
+  pictureFileName.value = "";
 };
 
 const populateForm = (testimonial) => {
@@ -70,7 +72,19 @@ const addOrEditTestimonial = async () => {
   if (isEditMode.value) {
     await editTestimonial();
   } else {
+    if (!image.value) {
+      alert("Nahrajte fotku.");
+      return;
+    }
     await addTestimonial();
+  }
+};
+
+const handleFileUpload = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    image.value = file;
+    pictureFileName.value = file.name;
   }
 };
 
@@ -78,16 +92,19 @@ const addTestimonial = async () => {
   try {
     const token = document.cookie.replace(/(?:(?:^|.*;\s*)access_token\s*=\s*([^;]*).*$)|^.*$/, "$1");
 
+    const formData = new FormData();
+    formData.append('name', name.value);
+    formData.append('image', image.value);
+    formData.append('testimonal_text', testimonal_text.value);
+    formData.append('conference_id', selectedConferenceId.value);
+
     const response = await axios.post(
-      import.meta.env.VITE_API_ENDPOINT + '/api/create-testimonal', {
-        name: name.value,
-        image: image.value,
-        testimonal_text: testimonal_text.value,
-        conference_id: selectedConferenceId.value
-      },
+      import.meta.env.VITE_API_ENDPOINT + '/api/create-testimonal',
+      formData,
       {
         headers: {
           Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
         },
       }
     );
@@ -104,15 +121,22 @@ const editTestimonial = async () => {
   try {
     const token = document.cookie.replace(/(?:(?:^|.*;\s*)access_token\s*=\s*([^;]*).*$)|^.*$/, "$1");
 
-    const response = await axios.patch(
-      import.meta.env.VITE_API_ENDPOINT + `/api/update-testimonal/${currentTestimonial.value.id}`, {
-        name: name.value,
-        image: image.value,
-        testimonal_text: testimonal_text.value
-      },
+    const formData = new FormData();
+    formData.append('name', name.value);
+    formData.append('testimonal_text', testimonal_text.value);
+    formData.append('conference_id', selectedConferenceId.value);
+    if (image.value instanceof File) {
+      formData.append('image', image.value);
+    }
+    formData.append('_method', 'PATCH');
+
+    const response = await axios.post(
+      import.meta.env.VITE_API_ENDPOINT + `/api/update-testimonal/${currentTestimonial.value.id}`,
+      formData,
       {
         headers: {
           Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
         },
       }
     );
@@ -175,7 +199,7 @@ onMounted(async () => {
 
       <div class="container-fluid mb-4">
         <div class="row justify-content-center text-center py-2">
-          <div class="col-lg-6 mx-auto">
+          <div class="mx-auto">
             <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
               <div v-for="conference in conferences" :key="conference.id" class="form-check form-check-inline d-flex flex-column flex-sm-row">
                 <input class="btn-check" type="radio" name="conference" :id="'conference' + conference.id" :value="conference.id" v-model="selectedConferenceId" @change="handleConferenceChange">
@@ -230,10 +254,12 @@ onMounted(async () => {
           <input type="text" v-model="name" class="form-control" placeholder="Meno" required />
         </div>
         <div class="mb-3 custom-input">
-          <input type="text" v-model="image" class="form-control" placeholder="URL obrázka" required />
+          <textarea v-model="testimonal_text" class="form-control" placeholder="Text" rows="3" required></textarea>
         </div>
         <div class="mb-3 custom-input">
-          <textarea v-model="testimonal_text" class="form-control" placeholder="Text" rows="3" required></textarea>
+          <label for="file-upload" class="btn btn-secondary btn-block">Nahrajte obrázok</label>
+          <input type="file" @change="handleFileUpload" id="file-upload" style="display: none;" />
+          <span v-if="pictureFileName">{{ pictureFileName }}</span>
         </div>
         <div class="text-center">
           <MaterialButton

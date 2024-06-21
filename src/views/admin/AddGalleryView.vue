@@ -114,7 +114,7 @@ onMounted(async () => {
 
       <div class="container-fluid mb-4">
         <div class="row justify-content-center text-center py-2">
-          <div class="col-lg-6 mx-auto">
+          <div class="mx-auto">
             <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
               <div v-for="conference in conferences" :key="conference.id" class="form-check form-check-inline d-flex flex-column flex-sm-row">
                 <input class="btn-check" type="radio" name="conference" :id="'conference' + conference.id" :value="conference.id" v-model="selectedConferenceId" @change="handleConferenceChange">
@@ -128,7 +128,7 @@ onMounted(async () => {
       <div class="text-center mb-4">
         <MaterialButton
             variant="gradient"
-            color="secondary"
+            color="dark"
             @click="toggleUploadArea"
             class="col-lg-4 col-sm-12"
         ><i class="fas fa-plus me-2"></i>Nahrať fotky</MaterialButton>
@@ -212,4 +212,16 @@ onMounted(async () => {
 .custom-input p {
   margin: 0;
 }
+.btn-check + .btn {
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.btn-check:checked + .btn-outline-dark {
+  background-image: linear-gradient(180deg, rgba(34,34,34,1) 0%, rgba(51,51,51,1) 100%);
+  border-color: rgba(34,34,34,1);
+  color: white;
+}
 </style>
+
+

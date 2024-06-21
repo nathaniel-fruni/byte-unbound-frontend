@@ -25,6 +25,7 @@ const getPartnerImageUrl = (imageName) => {
           <a :href="partner.website" target="_blank" rel="noopener noreferrer">
             <img
                 class="w-100 opacity-7"
+                style="object-fit: contain; width: 100px; height: 100px"
                 :src="getPartnerImageUrl(partner.logo)"
                 :alt="partner.name"
             />
