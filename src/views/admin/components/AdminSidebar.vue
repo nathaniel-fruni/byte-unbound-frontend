@@ -32,7 +32,7 @@ const sidebarItems = ref([
   { text: 'Galéria', route: 'add-gallery', icon: 'fa-images' },
   { text: 'Speakers', route: 'manage-speakers', icon: 'fa-chalkboard-teacher' },
   { text: 'Prednášky', route: 'manage-talks', icon: 'fa-chalkboard' },
-  { text: 'Stage', route: '', icon: 'fa-tv' },
+  { text: 'Stage', route: 'manage-stages', icon: 'fa-tv' },
   { text: 'Pridať obsah', route: 'add-content', icon: 'fa-code' },
   { text: 'Pridať admina', route: 'admin-registration', icon: 'fa-user-plus' },
   { text: 'Hlavná stránka', route: 'home', icon: 'fa-home' },
