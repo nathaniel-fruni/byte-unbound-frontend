@@ -45,6 +45,10 @@ watch(
     }
   }
 );
+function toggleNavbar() {
+  const navigation = document.getElementById('navigation');
+  navigation.classList.toggle('show');
+}
 </script>
 <template>
   <nav
@@ -77,22 +81,10 @@ watch(
         title="Designed and Coded by Creative Tim"
         data-placement="bottom"
       >
-        byteUnbound
+        nConnect
       </RouterLink>
-      <button
-        class="navbar-toggler shadow-none ms-2"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navigation"
-        aria-controls="navigation"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon mt-2">
-          <span class="navbar-toggler-bar bar1"></span>
-          <span class="navbar-toggler-bar bar2"></span>
-          <span class="navbar-toggler-bar bar3"></span>
-        </span>
+      <button class="navbar-toggler" type="button"  @click="toggleNavbar">
+        <span ><i class="fas fa-bars"></i></span>
       </button>
       <div
         class="collapse navbar-collapse w-100 pt-3 pb-2 py-lg-0"

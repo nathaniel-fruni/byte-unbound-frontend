@@ -16,7 +16,7 @@ onMounted(async () => {
 
   try {
     const response = await axios.get(
-        import.meta.env.VITE_API_ENDPOINT + "/api/get-partners"
+        `${import.meta.env.VITE_API_ENDPOINT}/api/get-partners`
     );
     partners.value = response.data;
   } catch (error) {
@@ -31,7 +31,15 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <DefaultNavbar transparent />
+  <div>
+    <div class="container position-sticky z-index-sticky top-0">
+      <div class="row">
+        <div class="col-12">
+
+          <DefaultNavbar :sticky="true" />
+        </div>
+      </div>
+    </div>
   <header class="bg-gradient-dark">
     <div
         class="page-header min-vh-75"
@@ -57,4 +65,5 @@ onUnmounted(() => {
     <Partners :partners="partners" />
   </div>
   <DefaultFooter />
+  </div>
 </template>

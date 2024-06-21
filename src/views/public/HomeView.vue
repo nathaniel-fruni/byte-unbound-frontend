@@ -92,16 +92,17 @@ onUnmounted(() => {
     </div>
   </Header>
 
-  <div class="card card-body blur shadow-blur mx-3 mx-md-4 mt-n6">
+  <div>
+    <div class="card card-body blur shadow-blur mx-3 mx-md-4 mt-n6 mb-6">
     <MainInfo :conference="conference" />
-    <div class="text-center">
+    <div class="text-center mb-7">
       <RouterLink :to="{ name: 'program' }"><span class="m-3 col-lg-3 col-sm-12 btn btn-sm mb-0 bg-gradient-dark px-5 py-3 mt-4">Program</span></RouterLink>
       <RouterLink :to="{ name: 'speakers' }"><span class="m-3 col-lg-3 col-sm-12 btn btn-sm mb-0 bg-gradient-dark px-5 py-3 mt-4">Speakers</span></RouterLink>
-      <RouterLink :to="{ name: 'speakers' }"><span class="m-3 col-lg-3 col-sm-12 btn btn-sm mb-0 bg-gradient-dark px-5 py-3 mt-4">Registrácia</span></RouterLink>
+      <RouterLink :to="{ name: 'registration' }"><span class="m-3 col-lg-3 col-sm-12 btn btn-sm mb-0 bg-gradient-dark px-5 py-3 mt-4">Registrácia</span></RouterLink>
     </div>
 
     <div>
-      <section class="py-8">
+      <section>
         <div class="container">
           <div class="row">
             <div class="col-lg-8 my-auto">
@@ -122,11 +123,15 @@ onUnmounted(() => {
         </div>
       </section>
     </div>
+    </div>
 
-    <h2 class="text-center mb-5">Speakers</h2>
-    <Speakers />
+    <h2 class="text-center mb-7">Speakers</h2>
+    <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6 m-t6">
+      <Speakers />
+    </div>
 
-    <h2 class="text-center mt-6">Program</h2>
+    <div class="card card-body blur shadow-blur mx-3 mx-md-4 mb-6 mt-5">
+    <h2 class="text-center mt-3">Program</h2>
     <Program />
 
     <PresentationTestimonials />
@@ -138,7 +143,7 @@ onUnmounted(() => {
           <div class="d-flex justify-content-center mt-3 flex-wrap">
             <div v-for="sponsor in sponsors" :key="sponsor.id" class="col-6 col-sm-4 col-md-3 col-lg-2 mb-3 d-flex justify-content-center">
               <a :href="sponsor.website" data-bs-toggle="tooltip" data-bs-placement="bottom" :title="sponsor.name">
-                <img :src="getSponsorImageUrl(sponsor.logo)" :alt="sponsor.name" class="img-fluid sponsor-logo" />
+                <img :src="getSponsorImageUrl(sponsor.logo)" :alt="sponsor.name" class="w-100 sponsor-logo" />
               </a>
             </div>
           </div>
@@ -163,13 +168,14 @@ onUnmounted(() => {
       </div>
     </div>
   </div>
-
+  </div>
   <DefaultFooter />
 </template>
 
 <style>
 .sponsor-logo {
-  max-height: 90px;
+  height: 100px;
+  width: 100px;
   object-fit: contain;
 }
 </style>

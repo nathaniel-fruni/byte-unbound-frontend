@@ -17,7 +17,15 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <DefaultNavbar transparent />
+  <div>
+    <div class="container position-sticky z-index-sticky top-0">
+      <div class="row">
+        <div class="col-12">
+
+          <DefaultNavbar :sticky="true" />
+        </div>
+      </div>
+    </div>
   <header class="bg-gradient-dark">
     <div
         class="page-header min-vh-75"
@@ -39,8 +47,8 @@ onUnmounted(() => {
     </div>
   </header>
   <div class="card card-body shadow-xl mx-3 mx-md-4 mt-n6 m-t6">
-    <!-- Insert the RegistrationForm component here -->
     <RegistrationForm />
   </div>
   <DefaultFooter />
+  </div>
 </template>
