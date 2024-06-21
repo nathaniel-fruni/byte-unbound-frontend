@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue'
 import axios from 'axios'
 import MetricCard from '@/views/admin/components/MetricCard.vue';
-import AttendeesTable from '@/views/admin/components/AttendeesTable.vue';
+import AttendeesTable from '@/views/admin/sections/AttendeesTable.vue';
 import CreateSponsor from '@/views/admin/sections/CreateSponsor.vue';
 
 const token = document.cookie.replace(/(?:(?:^|.*;\s*)access_token\s*=\s*([^;]*).*$)|^.*$/, "$1");

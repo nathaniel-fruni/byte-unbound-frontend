@@ -7,6 +7,7 @@ import DefaultNavbar from '@/views/public/components/NavbarDefault.vue';
 
 const email = ref("");
 const password = ref("");
+const incorrectLogin = ref(false);
 
 const router = useRouter();
 
@@ -17,17 +18,17 @@ const signIn = async () => {
       email: email.value,
       password: password.value
     });
+    incorrectLogin.value = false;
 
     const accessToken = response.data.accessToken;
     document.cookie = `access_token=${accessToken};path=/;`;
-    //console.log('Používateľ prihlásený', response.data);
     router.push('/admin');
   } catch (error) {
     if (error.response && error.response.status === 422) {
       console.error('Validation error:', error.response.data);
     } else {
       console.error('An error occurred:', error);
-      alert('Nesprávne údaje');
+      incorrectLogin.value = true;
     }
   }
 };
@@ -63,6 +64,9 @@ const signIn = async () => {
                       <MaterialButton class="my-4 mb-2" variant="gradient" color="dark" fullWidth>Prihlásiť sa</MaterialButton>
                     </div>
                   </form>
+                </div>
+                <div v-if="incorrectLogin" class="text-center text-danger">
+                  <p>Nesprávne prihlasovacie údaje.</p>
                 </div>
               </div>
             </div>

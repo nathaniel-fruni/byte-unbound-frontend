@@ -11,6 +11,7 @@ const showNewForm = ref(false);
 const isEditMode = ref(false);
 const currentTestimonial = ref(null);
 const pictureFileName = ref("");
+const ispictureMissing = ref(false);
 
 const name = ref("");
 const image = ref("");
@@ -60,6 +61,7 @@ const resetForm = () => {
   currentTestimonial.value = null;
   isEditMode.value = false;
   pictureFileName.value = "";
+  ispictureMissing.value = false;
 };
 
 const populateForm = (testimonial) => {
@@ -72,10 +74,6 @@ const addOrEditTestimonial = async () => {
   if (isEditMode.value) {
     await editTestimonial();
   } else {
-    if (!image.value) {
-      alert("Nahrajte fotku.");
-      return;
-    }
     await addTestimonial();
   }
 };
@@ -85,10 +83,16 @@ const handleFileUpload = (event) => {
   if (file) {
     image.value = file;
     pictureFileName.value = file.name;
+    ispictureMissing.value = false;
   }
 };
 
 const addTestimonial = async () => {
+  if (!image.value) {
+    ispictureMissing.value = true;
+    return;
+  }
+
   try {
     const token = document.cookie.replace(/(?:(?:^|.*;\s*)access_token\s*=\s*([^;]*).*$)|^.*$/, "$1");
 
@@ -191,19 +195,21 @@ onMounted(async () => {
 
 <template class="">
   <div class="col-lg-12 bg-gradient-dark rounded-3 p-2 px-2 shadow-blur mb-3 text-center">
-    <h3 class="text-white">Povedali o nás</h3>
+    <h3 class="text-white"><i class="fas fa-newspaper me-2"></i>Povedali o nás</h3>
   </div>
 
   <div class="card card-body shadow-xl mx-3 mx-md-4 p-4 d-flex justify-content-center align-content-center">
     <div class="col">
 
-      <div class="container-fluid mb-4">
-        <div class="row justify-content-center text-center py-2">
-          <div class="mx-auto">
-            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-              <div v-for="conference in conferences" :key="conference.id" class="form-check form-check-inline d-flex flex-column flex-sm-row">
-                <input class="btn-check" type="radio" name="conference" :id="'conference' + conference.id" :value="conference.id" v-model="selectedConferenceId" @change="handleConferenceChange">
-                <label class="btn btn-outline-dark" :for="'conference' + conference.id">{{ conference.title }}</label>
+      <div class="row justify-content-center text-center py-2">
+        <div class="col-auto">
+          <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+            <div class="row justify-content-center">
+              <div v-for="conference in conferences" :key="conference.id" class="col-lg-4 col-sm-12">
+                <div class="form-check">
+                  <input class="btn-check" type="radio" name="conference" :id="'conference' + conference.id" :value="conference.id" v-model="selectedConferenceId" @change="handleConferenceChange">
+                  <label class="btn btn-outline-dark w-100 mb-2" :for="'conference' + conference.id">{{ conference.title }}</label>
+                </div>
               </div>
             </div>
           </div>
@@ -268,6 +274,7 @@ onMounted(async () => {
             type="submit"
             class="mb-0 col-2"
           >{{ isEditMode.value ? 'Upraviť' : 'Odoslať' }}</MaterialButton>
+          <p v-if="ispictureMissing" class="text-danger mt-2">Nahrajte obrázok.</p>
         </div>
       </form>
     </div>

@@ -2,8 +2,20 @@
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
 import MaterialButton from '@/components/MaterialButton.vue'
-import { onBeforeUnmount, ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import axios from 'axios'
+
+const conference = ref({});
+const fetchNewestConference = async () => {
+  try {
+    const response = await axios.get(
+      import.meta.env.VITE_API_ENDPOINT + "/api/get-newestConference"
+    );
+    conference.value = response.data;
+  } catch (error) {
+    console.error("Error fetching the newest conference data:", error);
+  }
+};
 
 const title = ref("");
 const editor = useEditor({
@@ -38,6 +50,10 @@ const savePage = async () => {
   }
 };
 
+onMounted(async () => {
+  await fetchNewestConference();
+});
+
 onBeforeUnmount(() => {
   if (editor.value) {
     editor.value.destroy()
@@ -47,6 +63,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="editor-container card shadow-dark p-3 pt-4">
+    <h4 class="text-center mb-3">{{ conference.title }}</h4>
     <input v-model="title" placeholder="Nadpis" class="title-input" />
     <editor-content :editor="editor" class="editor-content" />
     <div class="text-center mb-4">

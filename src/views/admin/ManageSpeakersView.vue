@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue'
 import axios from 'axios'
 import MaterialButton from '@/components/MaterialButton.vue'
 
+const conference = ref({});
 const speakers = ref([]);
 const partners = ref([]);
 const showNewForm = ref(false);
@@ -12,6 +13,7 @@ const getSpeakerImageUrl = (imageName) => {
   return import.meta.env.VITE_API_ENDPOINT + `/storage/images/speakers/${imageName}`;
 };
 const pictureFileName = ref("");
+const ispictureMissing = ref(false);
 
 const first_name = ref("");
 const last_name = ref("");
@@ -38,6 +40,7 @@ const resetForm = () => {
   partner_id.value = "";
   isEditMode.value = false;
   pictureFileName.value = "";
+  ispictureMissing.value = false;
 };
 
 const populateForm = (speaker) => {
@@ -54,10 +57,6 @@ const addOrEditSpeaker = async () => {
   if (isEditMode.value) {
     await editSpeaker();
   } else {
-    if (!picture.value) {
-      alert("Nahrajte fotku.");
-      return;
-    }
     await addSpeaker();
   }
 };
@@ -67,6 +66,17 @@ const startEdit = (speaker) => {
   populateForm(speaker);
   isEditMode.value = true;
   showNewForm.value = true;
+};
+
+const fetchNewestConference = async () => {
+  try {
+    const response = await axios.get(
+      import.meta.env.VITE_API_ENDPOINT + "/api/get-newestConference"
+    );
+    conference.value = response.data;
+  } catch (error) {
+    console.error("Error fetching the newest conference data:", error);
+  }
 };
 
 const fetchPartners = async () => {
@@ -96,10 +106,16 @@ const handleFileUpload = (event) => {
   if (file) {
     picture.value = file;
     pictureFileName.value = file.name;
+    ispictureMissing.value = false;
   }
 };
 
 const addSpeaker = async () => {
+  if (!picture.value) {
+    ispictureMissing.value = true;
+    return;
+  }
+
   try {
     const token = document.cookie.replace(/(?:(?:^|.*;\s*)access_token\s*=\s*([^;]*).*$)|^.*$/,"$1");
 
@@ -190,6 +206,7 @@ const deleteSpeaker = async (speakerId) => {
 };
 
 onMounted(async () => {
+  await fetchNewestConference();
   await fetchSpeakers();
   await fetchPartners();
 });
@@ -197,9 +214,10 @@ onMounted(async () => {
 
 <template>
   <div class="col-lg-12 bg-gradient-dark rounded-3 p-2 px-2 shadow-blur mb-3 text-center">
-    <h3 class="text-white">Speakers</h3>
+    <h3 class="text-white"><i class="fas fa-chalkboard-teacher me-2"></i>Speakers</h3>
   </div>
   <div class="card card-body shadow-xl mx-3 mx-md-4 p-4 d-flex justify-content-center align-content-center">
+    <h4 class="text-center">{{ conference.title }}</h4>
     <div class="col-lg-12 px-4">
       <div class="col-lg-12 col-md-12 mb-4 mt-1 pt-3" v-for="(speaker, index) in speakers" :key="index">
         <div class="card bg-gradient-dark card-plain" style="height: 100%;">
@@ -280,6 +298,7 @@ onMounted(async () => {
                 type="submit"
                 class="mb-0 col-6"
             >{{ isEditMode.value ? 'Upraviť' : 'Odoslať' }}</MaterialButton>
+            <p v-if="ispictureMissing" class="text-danger mt-2">Nahrajte obrázok.</p>
           </div>
         </form>
       </div>

@@ -1,6 +1,6 @@
 <script setup>
 import axios from 'axios';
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import MaterialButton from '@/components/MaterialButton.vue';
 import VueTimepicker from 'vue3-timepicker';
 import 'vue3-timepicker/dist/VueTimepicker.css';
@@ -92,7 +92,6 @@ const populateForm = (timeSlot) => {
   start_time.value = formatTime(timeSlot.start_time);
   end_time.value = formatTime(timeSlot.end_time);
   talk_id.value = timeSlot.talk_id;
-  console.log(start_time.value);
 };
 
 const addOrEditTimeSlot = async () => {
@@ -218,7 +217,7 @@ const isTimeSlotOverlap = (newStartTime, newEndTime) => {
     const existingEnd = new Date(slot.end_time);
 
     if (currentTimeSlot.value && (slot.id === currentTimeSlot.value.id)) {
-      return false;
+      continue;
     }
 
     if (
@@ -239,6 +238,11 @@ function formatTime(dateTime) {
   return `${hours}:${minutes}`;
 }
 
+watch(currentTimeSlot, (newTimeSlot) => {
+  if (newTimeSlot) {
+    populateForm(newTimeSlot);
+  }
+});
 
 onMounted(async () => {
   await fetchStages();
@@ -251,25 +255,15 @@ onMounted(async () => {
     <div class="card card-body shadow-dark rounded-3 mx-md-4 p-4">
       <h3 class="col-12 text-center mt-2">Spravovanie časových okien</h3>
       <div class="row justify-content-center mt-2">
-        <div class="container-fluid mb-3 d-flex justify-content-center align-content-center">
-          <div class="row justify-content-center text-center py-2">
-            <div class="mx-auto">
-              <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                <div
-                  v-for="stage in stages"
-                  :key="stage.id"
-                  class="form-check form-check-inline d-flex flex-column flex-sm-row"
-                >
-                  <input
-                    class="btn-check"
-                    type="radio"
-                    name="stage"
-                    :id="'stage' + stage.id"
-                    :value="stage.id"
-                    v-model="selectedStageId"
-                    @change="handleStageChange"
-                  />
-                  <label class="btn btn-outline-dark" :for="'stage' + stage.id">{{ stage.name }}</label>
+        <div class="row justify-content-center text-center py-2">
+          <div class="col-auto">
+            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+              <div class="row justify-content-center">
+                <div v-for="stage in stages" :key="stage.id" class="col-lg-6 col-sm-12">
+                  <div class="form-check">
+                    <input class="btn-check" type="radio" name="conference" :id="'conference' + stage.id" :value="stage.id" v-model="selectedStageId" @change="handleStageChange">
+                    <label class="btn btn-outline-dark w-100 mb-2" :for="'conference' + stage.id">{{ stage.name }}</label>
+                  </div>
                 </div>
               </div>
             </div>
@@ -313,8 +307,11 @@ onMounted(async () => {
         ><i class="fas fa-plus me-2"></i>Pridať okno</MaterialButton>
       </div>
 
-      <div v-show="isEditMode || (!isTalksEmpty && showNewForm)">
-        <form @submit.prevent="addOrEditTimeSlot">
+      <div v-show="showNewForm || isEditMode">
+        <div v-if="isTalksEmpty && !isEditMode" class="text-center text-danger">
+          <p class="mt-3">Žiadne prednášky pre pridelenie.</p>
+        </div>
+        <form v-if="isEditMode || (showNewForm && !isTalksEmpty)" @submit.prevent="addOrEditTimeSlot">
           <div v-if="!isEditMode" class="mb-3 custom-input">
             <label for="partner_id">Prednáška</label>
             <select v-model="talk_id" class="form-control" required>

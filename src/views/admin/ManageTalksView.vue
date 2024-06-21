@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue'
 import axios from 'axios'
 import MaterialButton from '@/components/MaterialButton.vue'
 
+const conference = ref({});
 const talks = ref([]);
 const speakers = ref([]);
 const showNewForm = ref(false);
@@ -13,6 +14,7 @@ const title = ref("");
 const description = ref("");
 const capacity = ref("");
 const speaker_id = ref("");
+const errorMessage = ref("");
 
 const toggleNewForm = () => {
   showNewForm.value = !showNewForm.value;
@@ -27,6 +29,7 @@ const resetForm = () => {
   capacity.value = "";
   speaker_id.value = "";
   isEditMode.value = false;
+  errorMessage.value = "";
 };
 
 const populateForm = (talk) => {
@@ -51,11 +54,22 @@ const startEdit = (talk) => {
   showNewForm.value = true;
 };
 
+const fetchNewestConference = async () => {
+  try {
+    const response = await axios.get(
+      import.meta.env.VITE_API_ENDPOINT + "/api/get-newestConference"
+    );
+    conference.value = response.data;
+  } catch (error) {
+    console.error("Error fetching the newest conference data:", error);
+  }
+};
+
 const fetchSpeakers = async () => {
   try {
     const response = await axios.get(
-        import.meta.env.VITE_API_ENDPOINT + `/api/get-speakers`
-  );
+      import.meta.env.VITE_API_ENDPOINT + `/api/get-speakers`
+    );
     speakers.value = response.data;
   } catch (error) {
     console.error("Error fetching speaker data:", error);
@@ -65,8 +79,8 @@ const fetchSpeakers = async () => {
 const fetchTalks = async () => {
   try {
     const response = await axios.get(
-        import.meta.env.VITE_API_ENDPOINT + `/api/get-talks`
-  );
+      import.meta.env.VITE_API_ENDPOINT + `/api/get-talks`
+    );
     talks.value = response.data;
   } catch (error) {
     console.error("Error fetching talk data:", error);
@@ -78,18 +92,18 @@ const addTalk = async () => {
     const token = document.cookie.replace(/(?:(?:^|.*;\s*)access_token\s*=\s*([^;]*).*$)|^.*$/,"$1");
 
     const response = await axios.post(
-        import.meta.env.VITE_API_ENDPOINT + '/api/create-talk', {
-          title: title.value,
-          description: description.value,
-          capacity: capacity.value,
-          remaining_capacity: capacity.value,
-          speaker_id: speaker_id.value
+      import.meta.env.VITE_API_ENDPOINT + '/api/create-talk', {
+        title: title.value,
+        description: description.value,
+        capacity: capacity.value,
+        remaining_capacity: capacity.value,
+        speaker_id: speaker_id.value
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      }
     );
     talks.value.push(response.data);
 
@@ -104,26 +118,26 @@ const editTalk = async () => {
   try {
     const min_capacity = currentTalk.value.capacity - currentTalk.value.remaining_capacity;
     if (min_capacity > capacity.value) {
-      alert("Zadajte kapacitu väčšiu ako " + min_capacity);
+      errorMessage.value = `Zadajte kapacitu väčšiu ako ${min_capacity}`;
     } else {
       const token = document.cookie.replace(/(?:(?:^|.*;\s*)access_token\s*=\s*([^;]*).*$)|^.*$/,"$1");
 
       console.log(currentTalk.value.id);
 
       const response = await axios.patch(
-          import.meta.env.VITE_API_ENDPOINT + `/api/update-talk/${currentTalk.value.id}`, {
-        title: title.value,
-        description: description.value,
-        capacity: capacity.value,
-        remaining_capacity: currentTalk.value.remaining_capacity + (capacity.value - currentTalk.value.capacity),
-        speaker_id: speaker_id.value
-      },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-    );
+        import.meta.env.VITE_API_ENDPOINT + `/api/update-talk/${currentTalk.value.id}`, {
+          title: title.value,
+          description: description.value,
+          capacity: capacity.value,
+          remaining_capacity: currentTalk.value.remaining_capacity + (capacity.value - currentTalk.value.capacity),
+          speaker_id: speaker_id.value
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       const index = talks.value.findIndex(t => t.id === currentTalk.value.id);
       if (index !== -1) {
@@ -143,13 +157,13 @@ const deleteTalk = async (talkId) => {
     const token = document.cookie.replace(/(?:(?:^|.*;\s*)access_token\s*=\s*([^;]*).*$)|^.*$/,"$1");
 
     await axios.delete(
-        import.meta.env.VITE_API_ENDPOINT + `/api/delete-talk/${talkId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-  );
+      import.meta.env.VITE_API_ENDPOINT + `/api/delete-talk/${talkId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     talks.value = talks.value.filter(t => t.id !== talkId);
   } catch (error) {
@@ -158,6 +172,7 @@ const deleteTalk = async (talkId) => {
 };
 
 onMounted(async () => {
+  await fetchNewestConference();
   await fetchSpeakers();
   await fetchTalks();
 });
@@ -165,9 +180,10 @@ onMounted(async () => {
 
 <template>
   <div class="col-lg-12 bg-gradient-dark rounded-3 p-2 px-2 shadow-blur mb-3 text-center">
-    <h3 class="text-white">Prednášky</h3>
+    <h3 class="text-white"><i class="fas fa-chalkboard me-2"></i>Prednášky</h3>
   </div>
   <div class="card card-body shadow-xl mx-3 mx-md-4 p-4 d-flex justify-content-center align-content-center">
+    <h4 class="text-center">{{ conference.title }}</h4>
     <div class="col-lg-12 px-4">
       <div class="col-lg-12 col-md-12 mb-4 mt-3" v-for="(talk, index) in talks" :key="index">
         <div class="card bg-gradient-dark card-plain" style="height: 100%;">
@@ -196,10 +212,10 @@ onMounted(async () => {
       </div>
       <div class="text-center">
         <MaterialButton
-            variant="gradient"
-            color="dark"
-            @click="toggleNewForm"
-            class="mb-0 col-lg-9 col-sm-12"
+          variant="gradient"
+          color="dark"
+          @click="toggleNewForm"
+          class="mb-0 col-lg-9 col-sm-12"
         ><i class="fas fa-plus me-2"></i>Pridať prednášku</MaterialButton>
       </div>
 
@@ -224,12 +240,13 @@ onMounted(async () => {
           </div>
           <div class="text-center">
             <MaterialButton
-                variant="gradient"
-                color="dark"
-                type="submit"
-                class="mb-0 col-6"
+              variant="gradient"
+              color="dark"
+              type="submit"
+              class="mb-0 col-6"
             >{{ isEditMode.value ? 'Upraviť' : 'Odoslať' }}</MaterialButton>
           </div>
+          <p v-if="errorMessage" class="text-danger mt-2">{{ errorMessage }}</p>
         </form>
       </div>
     </div>
