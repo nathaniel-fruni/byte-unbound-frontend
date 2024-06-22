@@ -92,8 +92,15 @@ const fetchPartners = async () => {
 
 const fetchSpeakers = async () => {
   try {
+    const token = document.cookie.replace(/(?:(?:^|.*;\s*)access_token\s*=\s*([^;]*).*$)|^.*$/,"$1");
+
     const response = await axios.get(
-        import.meta.env.VITE_API_ENDPOINT + `/api/get-speakers-admin`
+        import.meta.env.VITE_API_ENDPOINT + `/api/get-speakers-admin`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
   );
     speakers.value = response.data;
   } catch (error) {

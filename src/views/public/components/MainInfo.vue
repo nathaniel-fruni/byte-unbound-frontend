@@ -44,7 +44,7 @@ const formatDateTime = (dateTimeStr) => {
             <div class="col-md-4 position-relative">
               <div class="text-center">
                 <h1 class="text-gradient text-dark">
-                  {{ conference.location.location }}
+                  {{ conference.address.city }}
                 </h1>
                 <h4>
                   {{ formatDateTime(conference.start_date).formattedDate }}

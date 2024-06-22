@@ -216,7 +216,7 @@ onMounted(async () => {
         </div>
       </div>
 
-      <div class="row">
+      <div v-if="testimonials.length >0" class="row">
         <div class="col-lg-6 col-md-6 mb-4 mt-1 pt-3" v-for="(testimonial, index) in testimonials" :key="index">
           <div class="card bg-gradient-dark card-plain" style="height: 100%;">
             <div class="card-body d-flex flex-column justify-content-between">
@@ -243,7 +243,12 @@ onMounted(async () => {
           </div>
         </div>
       </div>
-    </div>
+      <div v-else>
+        <div class="col-12 text-center">
+          <p class="text-muted">Zatiaľ žiadne príspevky.</p>
+        </div>
+      </div>
+   </div>
 
     <div class="text-center">
       <MaterialButton
