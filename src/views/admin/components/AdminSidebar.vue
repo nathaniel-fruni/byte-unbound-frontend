@@ -1,9 +1,10 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import axios from 'axios';
 
 const router = useRouter();
+const route = useRoute();
 const selectedItem = ref(0);
 
 const logout = async () => {
@@ -47,9 +48,24 @@ const resetToDefault = () => {
   setSelectedItem(0);
 };
 
+const updateSelectedItem = () => {
+  const currentRoute = route.name;
+  const foundIndex = sidebarItems.value.findIndex(item => item.route === currentRoute);
+  if (foundIndex !== -1) {
+    setSelectedItem(foundIndex);
+  } else {
+    resetToDefault();
+  }
+};
+
 onMounted(() => {
-  resetToDefault();
+  updateSelectedItem();
 });
+
+watch(route, () => {
+  updateSelectedItem();
+});
+
 </script>
 
 <template>
